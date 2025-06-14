@@ -16,6 +16,7 @@ $routes->group(
             $routes->post('(:segment)/wagon', 'Coaster\UI\Http\Controller\RegisterWagonController::__invoke/$1');
             $routes->get('(:segment)/wagon', 'Coaster\UI\Http\Controller\GetWagonsController::__invoke/$1');
             $routes->get('(:segment)/wagon/(:segment)', 'Coaster\UI\Http\Controller\GetWagonController::__invoke/$1/$2');
+            $routes->delete('(:segment)/wagon/(:segment)', 'Coaster\UI\Http\Controller\DeleteWagonController::__invoke/$1/$2');
         },
     ),
 );

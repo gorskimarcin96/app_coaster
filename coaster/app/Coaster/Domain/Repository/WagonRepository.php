@@ -10,7 +10,7 @@ use App\Coaster\Domain\ValueObject\WagonId;
 interface WagonRepository
 {
 
-    public function get(CoasterId $coasterId, WagonId $wagonId): Wagon;
+    public function get(CoasterId $coasterId, WagonId $wagonId): ?Wagon;
 
     /**
      * @return Wagon[]
@@ -18,4 +18,6 @@ interface WagonRepository
     public function getByQuery(GetWagonsQuery $query): array;
 
     public function save(Wagon $entity): void;
+
+    public function delete(Wagon $entity): void;
 }

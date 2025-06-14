@@ -21,12 +21,13 @@ final readonly class WagonRepository implements WagonRepositoryInterface
     /**
      * @throws Exception
      */
-    public function get(CoasterId $coasterId, WagonId $wagonId): Wagon
+    public function get(CoasterId $coasterId, WagonId $wagonId): ?Wagon
     {
         /** @var Redis $redis */
         $redis = service('redis');
+        $response = $redis->get($this->key($coasterId, $wagonId));
 
-        return WagonMapper::toDomain($redis->get($this->key($coasterId, $wagonId)));
+        return $response ? WagonMapper::toDomain($response) : null;
     }
 
     /**
@@ -41,7 +42,10 @@ final readonly class WagonRepository implements WagonRepositoryInterface
         $iterator = null;
 
         do {
-            foreach ($redis->scan($iterator, $this->key(new CoasterId(Uuid::fromString($query->coasterId)), null)) as $key) {
+            foreach ($redis->scan(
+                $iterator,
+                $this->key(new CoasterId(Uuid::fromString($query->coasterId)), null),
+            ) as $key) {
                 $data[] = WagonMapper::toDomain($redis->get($key));
             }
         } while ($iterator > 0);
@@ -57,6 +61,14 @@ final readonly class WagonRepository implements WagonRepositoryInterface
         /** @var Redis $redis */
         $redis = service('redis');
         $redis->set($this->key($entity->coasterId, $entity->id), WagonMapper::toJSON($entity));
+    }
+
+
+    public function delete(Wagon $entity): void
+    {
+        /** @var Redis $redis */
+        $redis = service('redis');
+        $redis->del($this->key($entity->coasterId, $entity->id));
     }
 
     private function key(?CoasterId $coasterId, ?WagonId $wagonId): string

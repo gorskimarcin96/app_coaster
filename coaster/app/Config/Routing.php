@@ -37,9 +37,9 @@ class Routing extends BaseRouting
      * The default namespace to use for Controllers when no other
      * namespace has been specified.
      *
-     * Default: 'App\Controllers'
+     * Default: 'App'
      */
-    public string $defaultNamespace = 'App\Controllers';
+    public string $defaultNamespace = 'App';
 
     /**
      * For Auto Routing.

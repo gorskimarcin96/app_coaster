@@ -2,7 +2,10 @@
 
 namespace Config;
 
-use App\Coaster\Infrastructure\Redis\CoasterRepository;
+use App\Coaster\Domain\Repository\CoasterRepository as DomainCoasterRepository;
+use App\Coaster\Infrastructure\Redis\CoasterRepository as InfrastructureCoasterRepository;
+use App\Coaster\Domain\Repository\WagonRepository as DomainWagonRepository;
+use App\Coaster\Infrastructure\Redis\WagonRepository as InfrastructureWagonRepository;
 use CodeIgniter\Config\BaseService;
 
 class Services extends BaseService
@@ -20,10 +23,17 @@ class Services extends BaseService
         return $redis;
     }
 
-    public static function coasterRepository($getShared = true): CoasterRepository
+    public static function coasterRepository($getShared = true): DomainCoasterRepository
     {
         return $getShared
             ? static::getSharedInstance('coasterRepository')
-            : new CoasterRepository();
+            : new InfrastructureCoasterRepository();
+    }
+
+    public static function wagonRepository($getShared = true): DomainWagonRepository
+    {
+        return $getShared
+            ? static::getSharedInstance('wagonRepository')
+            : new InfrastructureWagonRepository();
     }
 }

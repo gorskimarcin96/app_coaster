@@ -13,7 +13,7 @@ use Redis;
 
 final readonly class CoasterRepository implements CoasterRepositoryInterface
 {
-    private const REDIS_KEY = 'coaster';
+    public const KEY = 'coaster';
 
     /**
      * @throws Exception
@@ -23,7 +23,7 @@ final readonly class CoasterRepository implements CoasterRepositoryInterface
         /** @var Redis $redis */
         $redis = service('redis');
 
-        $response = $redis->get(self::REDIS_KEY . ':' . $id->getId()->toString());
+        $response = $redis->get($this->key($id));
 
         return $response ? CoasterMapper::toDomain($response) : null;
     }
@@ -36,12 +36,11 @@ final readonly class CoasterRepository implements CoasterRepositoryInterface
     {
         /** @var Redis $redis */
         $redis = service('redis');
-        $pattern = self::REDIS_KEY . ':*';
         $data = [];
         $iterator = null;
 
         do {
-            foreach ($redis->scan($iterator, $pattern) as $key) {
+            foreach ($redis->scan($iterator, $this->key(null)) as $key) {
                 $data[] = CoasterMapper::toDomain($redis->get($key));
             }
         } while ($iterator > 0);
@@ -56,6 +55,11 @@ final readonly class CoasterRepository implements CoasterRepositoryInterface
     {
         /** @var Redis $redis */
         $redis = service('redis');
-        $redis->set(self::REDIS_KEY . ':' . $entity->id, CoasterMapper::toJSON($entity));
+        $redis->set($this->key($entity->id), CoasterMapper::toJSON($entity));
+    }
+
+    private function key(?CoasterId $id): string
+    {
+        return sprintf('%s:%s', self::KEY, $id?->getId()->toString() ?? '*');
     }
 }

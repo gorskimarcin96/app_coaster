@@ -58,6 +58,16 @@ final readonly class CoasterRepository implements CoasterRepositoryInterface
         $redis->set($this->key($entity->id), CoasterMapper::toJSON($entity));
     }
 
+    /**
+     * @throws JsonException
+     */
+    public function update(Coaster $entity): void
+    {
+        /** @var Redis $redis */
+        $redis = service('redis');
+        $redis->set($this->key($entity->id), CoasterMapper::toJSON($entity));
+    }
+
     private function key(?CoasterId $id): string
     {
         return sprintf('%s:%s', self::KEY, $id?->getId()->toString() ?? '*');

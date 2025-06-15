@@ -46,4 +46,18 @@ class Coaster
             $timeRange,
         );
     }
+
+    public function withUpdatedData(
+        int $personNumber,
+        int $clientNumber,
+        TimeRange $timeRange,
+    ): Coaster {
+        return new Coaster(
+            $this->id,
+            $clientNumber,
+            $personNumber,
+            $this->distanceLength,
+            $timeRange,
+        );
+    }
 }

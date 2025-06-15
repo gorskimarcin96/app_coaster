@@ -16,4 +16,6 @@ interface CoasterRepository
     public function getByQuery(GetCoastersQuery $query): array;
 
     public function save(Coaster $entity): void;
+
+    public function update(Coaster $entity): void;
 }

@@ -65,4 +65,26 @@ final class CoasterTest extends CIUnitTestCase
         $this->assertSame($from, $entity->timeRange->fromDate);
         $this->assertSame($to, $entity->timeRange->toDate);
     }
+
+    public function testWithUpdatedData(): void
+    {
+        $entity = Coaster::fromPersistence(
+            CoasterId::generate(),
+            2,
+            1,
+            20,
+            new TimeRange(new DateTimeImmutable('01-01-2000'), new DateTimeImmutable('01-01-2000')),
+        );
+
+        $personNumber = 2;
+        $clientNumber = 1;
+        $from = new DateTimeImmutable('02-01-2000');
+        $to = new DateTimeImmutable('05-01-2000');
+        $entity = $entity->withUpdatedData($personNumber, $clientNumber, new TimeRange($from, $to));
+
+        $this->assertSame($clientNumber, $entity->clientNumber);
+        $this->assertSame($personNumber, $entity->personNumber);
+        $this->assertSame($from, $entity->timeRange->fromDate);
+        $this->assertSame($to, $entity->timeRange->toDate);
+    }
 }

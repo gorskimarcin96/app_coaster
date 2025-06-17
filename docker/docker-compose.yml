@@ -19,11 +19,17 @@ services:
       - ./../coaster/:/var/www/html
       - ./config/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     depends_on:
-      - cache
+      - cache_development
+      - cache_production
     environment:
       - XDEBUG_MODE=coverage
-  cache:
-    container_name: cache
+  cache_development:
+    container_name: cache_development
     image: redis:8.0.2
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
+  cache_production:
+    container_name: cache_production
+    image: redis:8.0.2
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]

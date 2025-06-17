@@ -60,4 +60,9 @@ class Coaster
             $timeRange,
         );
     }
+
+    public function isOpenForDateTime(\DateTimeInterface $dateTime): bool
+    {
+        return $this->timeRange->includes($dateTime);
+    }
 }

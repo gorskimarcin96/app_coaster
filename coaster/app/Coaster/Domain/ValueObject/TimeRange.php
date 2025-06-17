@@ -25,4 +25,9 @@ final readonly class TimeRange
     {
         return $this->toDate;
     }
+
+    public function includes(DateTimeInterface $dateTime): bool
+    {
+        return $dateTime >= $this->fromDate && $dateTime <= $this->toDate;
+    }
 }

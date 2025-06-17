@@ -7,7 +7,9 @@ use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use CodeIgniter\Test\CIUnitTestCase;
 use DateTimeImmutable;
+use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class CoasterTest extends CIUnitTestCase
 {
@@ -86,5 +88,57 @@ final class CoasterTest extends CIUnitTestCase
         $this->assertSame($personNumber, $entity->personNumber);
         $this->assertSame($from, $entity->timeRange->fromDate);
         $this->assertSame($to, $entity->timeRange->toDate);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[DataProvider('isOpenForDateTimeDataProvider')]
+    public function testIsOpenForDateTime(bool $expected, string $dateTime, string $from, string $to): void
+    {
+        $entity = Coaster::register(
+            1,
+            1,
+            1,
+            new TimeRange(new DateTimeImmutable($from), new DateTimeImmutable($to)),
+        );
+
+        $this->assertSame($expected, $entity->isOpenForDateTime(new DateTimeImmutable($dateTime)));
+    }
+
+    public static function isOpenForDateTimeDataProvider(): array
+    {
+        return [
+            'inside range' => [
+                true,
+                '2025-06-17 09:00',
+                '2025-06-17 08:00',
+                '2025-06-17 16:00',
+            ],
+            'before range' => [
+                false,
+                '2025-06-17 07:00',
+                '2025-06-17 08:00',
+                '2025-06-17 16:00',
+            ],
+            'after range' => [
+                false,
+                '2025-06-17 17:00',
+                '2025-06-17 08:00',
+                '2025-06-17 16:00',
+            ],
+            'exactly at to' => [
+                true,
+                '2025-06-17 16:00',
+                '2025-06-17 08:00',
+                '2025-06-17 16:00',
+            ],
+            'exactly at from' => [
+                true,
+                '2025-06-17 08:00',
+                '2025-06-17 08:00',
+                '2025-06-17 16:00',
+            ],
+        ];
     }
 }

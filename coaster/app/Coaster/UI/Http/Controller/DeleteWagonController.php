@@ -4,6 +4,7 @@ namespace App\Coaster\UI\Http\Controller;
 
 use App\Coaster\Application\Command\DeleteWagonCommand\DeleteWagonCommand;
 use App\Coaster\Application\Command\DeleteWagonCommand\DeleteWagonHandler;
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Infrastructure\Redis\WagonRepository;
 use CodeIgniter\Exceptions\PageNotFoundException;
@@ -27,7 +28,7 @@ final class DeleteWagonController extends ResourceController
             $handler(new DeleteWagonCommand($coasterId, $wagonId));
 
             return $this->respond([], 200);
-        } catch (PageNotFoundException $exception) {
+        } catch (EntityNotFoundException $exception) {
             return $this->respond(['error' => $exception->getMessage()], 404);
         }
     }

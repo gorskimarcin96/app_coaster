@@ -13,6 +13,10 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
     && docker-php-ext-install \
       zip
 
+#xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 #intl
 RUN apt-get -y update \
     && apt-get install -y libicu-dev \

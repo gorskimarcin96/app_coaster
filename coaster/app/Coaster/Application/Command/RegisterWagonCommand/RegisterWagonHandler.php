@@ -2,6 +2,7 @@
 
 namespace App\Coaster\Application\Command\RegisterWagonCommand;
 
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
@@ -25,7 +26,7 @@ final readonly class RegisterWagonHandler
     public function __invoke(RegisterWagonCommand $command): WagonId
     {
         $coaster = $this->coasterRepository->get(new CoasterId(Uuid::fromString($command->coasterId)))
-            ?? throw new PageNotFoundException('Coaster not found.');
+            ?? throw new EntityNotFoundException('coaster');
 
         $entity = Wagon::register(
             $coaster->id,

@@ -54,8 +54,8 @@ class Coaster
     ): Coaster {
         return new Coaster(
             $this->id,
-            $clientNumber,
             $personNumber,
+            $clientNumber,
             $this->distanceLength,
             $timeRange,
         );

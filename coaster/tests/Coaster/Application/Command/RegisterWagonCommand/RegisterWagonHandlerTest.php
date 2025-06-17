@@ -10,7 +10,7 @@ use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use App\Coaster\Domain\ValueObject\WagonId;
-use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -66,7 +66,7 @@ final class RegisterWagonHandlerTest extends TestCase
         $handler = new RegisterWagonHandler($coasterRepository, $wagonRepository);
         $command = new RegisterWagonCommand(9, 2.3, 'fde7b0ea-5fed-4fa1-8927-de93998b79d0');
 
-        $this->expectException(PageNotFoundException::class);
+        $this->expectException(EntityNotFoundException::class);
 
         $handler($command);
     }

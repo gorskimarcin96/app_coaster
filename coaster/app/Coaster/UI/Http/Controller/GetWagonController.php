@@ -5,6 +5,7 @@ namespace App\Coaster\UI\Http\Controller;
 use App\Coaster\Application\Mapper\WagonMapper;
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdHandler;
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdQuery;
+use App\Coaster\Domain\Repository\WagonRepository;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
@@ -16,10 +17,13 @@ final class GetWagonController extends ResourceController
      */
     public function __invoke(string $coasterId, string $wagonId): ResponseInterface
     {
-
-        $handler = new GetWagonByIdHandler();
+        /** @var WagonRepository $repository */
+        $repository = service('wagonRepository');
+        $handler = new GetWagonByIdHandler($repository);
         $entity = $handler(new GetWagonByIdQuery($coasterId, $wagonId));
 
-        return $this->respond(WagonMapper::toDTO($entity), 200);
+        return $entity
+            ? $this->respond(WagonMapper::toDTO($entity), 200)
+            : $this->respond([], 404);
     }
 }

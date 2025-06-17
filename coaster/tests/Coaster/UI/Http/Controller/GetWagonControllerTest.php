@@ -2,57 +2,29 @@
 
 namespace Coaster\UI\Http\Controller;
 
-use App\Coaster\Domain\Model\Coaster;
-use App\Coaster\Domain\Repository\CoasterRepository;
-use App\Coaster\Domain\ValueObject\TimeRange;
-use CodeIgniter\Test\CIUnitTestCase;
-use CodeIgniter\Test\FeatureTestTrait;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Exception;
 use JsonException;
+use Tests\Support\AbstractApiTestCase;
 
-final class GetWagonControllerTest extends CIUnitTestCase
+final class GetWagonControllerTest extends AbstractApiTestCase
 {
-    use FeatureTestTrait;
-
     /**
      * @throws JsonException|Exception
      */
     public function testGet(): void
     {
-        /** @var CoasterRepository $repository */
-        $repository = service('coasterRepository');
-        $entity = Coaster::register(
-            1,
-            2,
-            10,
-            new TimeRange(new DateTimeImmutable('01-01-2000'), new DateTimeImmutable('01-01-2000')),
-        );
-        $repository->save($entity);
-
-        /** @var CoasterRepository $repository */
-        $repository = service('coasterRepository');
-        $entity = Coaster::register(
-            1,
-            2,
-            10,
-            new TimeRange(new DateTimeImmutable('01-01-2000'), new DateTimeImmutable('01-01-2000')),
-        );
-        $repository->save($entity);
-
-
-        $response = $this->get('api/coasters/' . $entity->id->getId()->toString());
+        $entity = $this->createWagon($this->createCoaster()->id);
+        $response = $this->get(sprintf('api/coasters/%s/wagon/%s', $entity->coasterId, $entity->id));
 
         $response->assertStatus(200);
 
         $responseData = json_decode($response->getJSON(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertStructure(['id', 'coasterId', 'numberOfPlaces', 'speed'], $responseData);
         $this->assertSame($responseData['id'], $entity->id->getId()->toString());
-        $this->assertSame($responseData['personNumber'], $entity->personNumber);
-        $this->assertSame($responseData['clientNumber'], $entity->clientNumber);
-        $this->assertSame($responseData['distanceLength'], $entity->distanceLength);
-        $this->assertSame($responseData['fromDate'], $entity->timeRange->fromDate->format(DateTimeInterface::ATOM));
-        $this->assertSame($responseData['toDate'], $entity->timeRange->toDate->format(DateTimeInterface::ATOM));
+        $this->assertSame($responseData['coasterId'], $entity->coasterId->getId()->toString());
+        $this->assertSame($responseData['numberOfPlaces'], $entity->numberOfPlaces);
+        $this->assertSame($responseData['speed'], $entity->speed);
     }
 
     /**
@@ -60,6 +32,7 @@ final class GetWagonControllerTest extends CIUnitTestCase
      */
     public function testNotFound(): void
     {
-        $this->get('api/coasters/e59c5487-5bfe-465a-b960-7f8a347113e6')->assertStatus(404);
+        $this->get('api/coasters/8cba65b6-b90e-4fdb-a993-f11093f65155/wagon/6cf78a9f-1988-4bc6-8bc2-e8c40d95a6d0')
+            ->assertStatus(404);
     }
 }

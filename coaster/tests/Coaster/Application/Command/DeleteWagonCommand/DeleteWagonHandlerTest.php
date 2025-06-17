@@ -10,7 +10,7 @@ use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
-use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -73,8 +73,8 @@ final class DeleteWagonHandlerTest extends TestCase
         $handler = new DeleteWagonHandler($coasterRepository, $wagonRepository);
         $command = new DeleteWagonCommand($coasterId->toString(), $wagonId->toString());
 
-        $this->expectExceptionMessage('Coaster not found.');
-        $this->expectException(PageNotFoundException::class);
+        $this->expectExceptionMessage('Entity "coaster" not found.');
+        $this->expectException(EntityNotFoundException::class);
 
         $handler($command);
     }
@@ -110,8 +110,8 @@ final class DeleteWagonHandlerTest extends TestCase
         $handler = new DeleteWagonHandler($coasterRepository, $wagonRepository);
         $command = new DeleteWagonCommand($coasterId->toString(), $wagonId->toString());
 
-        $this->expectExceptionMessage('Wagon not found.');
-        $this->expectException(PageNotFoundException::class);
+        $this->expectExceptionMessage('Entity "wagon" not found.');
+        $this->expectException(EntityNotFoundException::class);
 
         $handler($command);
     }

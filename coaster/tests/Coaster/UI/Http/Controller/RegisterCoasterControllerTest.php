@@ -2,15 +2,12 @@
 
 namespace Coaster\UI\Http\Controller;
 
-use CodeIgniter\Test\CIUnitTestCase;
-use CodeIgniter\Test\FeatureTestTrait;
 use Exception;
 use JsonException;
+use Tests\Support\AbstractApiTestCase;
 
-final class RegisterCoasterControllerTest extends CIUnitTestCase
+final class RegisterCoasterControllerTest extends AbstractApiTestCase
 {
-    use FeatureTestTrait;
-
     /**
      * @throws JsonException|Exception
      */

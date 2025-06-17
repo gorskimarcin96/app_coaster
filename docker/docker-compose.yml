@@ -17,8 +17,11 @@ services:
       dockerfile: ./../docker/php/Dockerfile
     volumes:
       - ./../coaster/:/var/www/html
+      - ./config/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     depends_on:
       - cache
+    environment:
+      - XDEBUG_MODE=coverage
   cache:
     container_name: cache
     image: redis:8.0.2

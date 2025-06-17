@@ -2,6 +2,7 @@
 
 namespace App\Coaster\UI\Http\Controller;
 
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use App\Coaster\Application\Command\Exception\InvalidCommandArgumentException;
 use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonCommand;
 use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonHandler;
@@ -33,7 +34,7 @@ final class RegisterWagonController extends ResourceController
             return $this->respond(['id' => $id->getId()->toString()], 201);
         } catch (InvalidCommandArgumentException $exception) {
             return $this->respond(['error' => $exception->getMessage()], 400);
-        } catch (PageNotFoundException $exception) {
+        } catch (EntityNotFoundException $exception) {
             return $this->respond(['error' => $exception->getMessage()], 404);
         }
     }

@@ -2,10 +2,10 @@
 
 namespace App\Coaster\Application\Command\ChangeCoasterCommand;
 
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
-use CodeIgniter\Exceptions\PageNotFoundException;
 use Exception;
 use Ramsey\Uuid\Uuid;
 
@@ -21,7 +21,7 @@ final readonly class ChangeCoasterHandler
     public function __invoke(ChangeCoasterCommand $command): void
     {
         $entity = $this->repository->get(new CoasterId(Uuid::fromString($command->id)))
-            ?? throw new PageNotFoundException('Coaster not found.');
+            ?? throw new EntityNotFoundException('coaster');
 
         $entity = $entity->withUpdatedData(
             $command->personNumber,

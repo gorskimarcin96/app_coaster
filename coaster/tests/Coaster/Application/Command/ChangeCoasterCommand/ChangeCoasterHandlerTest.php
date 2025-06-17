@@ -7,7 +7,7 @@ use App\Coaster\Application\Command\ChangeCoasterCommand\ChangeCoasterHandler;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\TimeRange;
-use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +40,7 @@ final class ChangeCoasterHandlerTest extends TestCase
      */
     public function testHandleWhenCoasterNotFound(): void
     {
-        $this->expectException(PageNotFoundException::class);
+        $this->expectException(EntityNotFoundException::class);
 
         $repository = $this->createMock(CoasterRepository::class);
         $repository->method('get')

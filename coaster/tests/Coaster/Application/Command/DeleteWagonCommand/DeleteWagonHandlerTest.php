@@ -33,9 +33,9 @@ final class DeleteWagonHandlerTest extends TestCase
             ->willReturn(
                 Coaster::fromPersistence(
                     new CoasterId($coasterId),
-                    0,
-                    0,
-                    0,
+                    1,
+                    2,
+                    3,
                     new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
                 ),
             );
@@ -94,9 +94,9 @@ final class DeleteWagonHandlerTest extends TestCase
             ->willReturn(
                 Coaster::fromPersistence(
                     new CoasterId($coasterId),
-                    0,
-                    0,
-                    0,
+                    1,
+                    2,
+                    3,
                     new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
                 ),
             );

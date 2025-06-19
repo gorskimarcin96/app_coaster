@@ -5,6 +5,8 @@ namespace Coaster\Domain\Model;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\WagonId;
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class WagonTest extends TestCase
@@ -30,5 +32,27 @@ final class WagonTest extends TestCase
         $this->assertSame($coasterId->getId()->toString(), $entity->coasterId->getId()->toString());
         $this->assertSame(1, $entity->numberOfPlaces);
         $this->assertSame(2.2, $entity->speed);
+    }
+
+    #[DataProvider('invalidArgumentExceptionDataProvider')]
+    public function testInvalidArgumentException(int $numberOfPlaces, float $speed): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Wagon::register(CoasterId::generate(), $numberOfPlaces, $speed);
+    }
+
+    public static function invalidArgumentExceptionDataProvider(): array
+    {
+        return [
+            'invalid number of places' => [
+                -3,
+                10.0,
+            ],
+            'invalid speed' => [
+                10,
+                -4.2,
+            ],
+        ];
     }
 }

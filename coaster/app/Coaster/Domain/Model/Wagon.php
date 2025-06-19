@@ -4,6 +4,10 @@ namespace App\Coaster\Domain\Model;
 
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\WagonId;
+use DateInterval;
+use Exception;
+use InvalidArgumentException;
+use LogicException;
 
 class Wagon
 {
@@ -13,6 +17,13 @@ class Wagon
         public readonly int $numberOfPlaces,
         public readonly float $speed,
     ) {
+        if ($speed <= 0) {
+            throw new InvalidArgumentException("Speed must be greater than 0 m/s.");
+        }
+
+        if ($numberOfPlaces <= 0) {
+            throw new InvalidArgumentException("Number of places must be greater than 0.");
+        }
     }
 
     public static function register(
@@ -40,5 +51,17 @@ class Wagon
             $numberOfPlaces,
             $speed,
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function calculateDurationForLength(float $distanceLength): DateInterval
+    {
+        if ($this->speed <= 0) {
+            throw new LogicException("Speed must be greater than zero.");
+        }
+
+        return new DateInterval('PT' . ceil($distanceLength / $this->speed) . 'S');
     }
 }

@@ -141,4 +141,38 @@ final class CoasterTest extends CIUnitTestCase
             ],
         ];
     }
+
+    #[DataProvider('invalidArgumentExceptionDataProvider')]
+    public function testInvalidArgumentException(int $personNumber, int $clientNumber, int $distanceLength): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Coaster::register(
+            $personNumber,
+            $clientNumber,
+            $distanceLength,
+            new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
+        );
+    }
+
+    public static function invalidArgumentExceptionDataProvider(): array
+    {
+        return [
+            'invalid person number' => [
+                0,
+                10,
+                50000,
+            ],
+            'invalid client number' => [
+                10,
+                0,
+                50000,
+            ],
+            'invalid distance length' => [
+                10,
+                10,
+                -50000,
+            ],
+        ];
+    }
 }

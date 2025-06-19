@@ -7,16 +7,17 @@ use App\Coaster\Infrastructure\Redis\CoasterRepository as InfrastructureCoasterR
 use App\Coaster\Domain\Repository\WagonRepository as DomainWagonRepository;
 use App\Coaster\Infrastructure\Redis\WagonRepository as InfrastructureWagonRepository;
 use CodeIgniter\Config\BaseService;
+use Redis;
 
-class Services extends BaseService
+final class Services extends BaseService
 {
-    public static function redis($getShared = true): \Redis
+    public static function redis($getShared = true): Redis
     {
         if ($getShared) {
-            return static::getSharedInstance('redis');
+            return self::getSharedInstance('redis');
         }
 
-        $redis = new \Redis();
+        $redis = new Redis();
         $redis->connect($_ENV['REDIS_HOST'], $_ENV['REDIS_PORT']);
         $redis->select($_ENV['REDIS_DB']);
 
@@ -26,14 +27,14 @@ class Services extends BaseService
     public static function coasterRepository($getShared = true): DomainCoasterRepository
     {
         return $getShared
-            ? static::getSharedInstance('coasterRepository')
+            ? self::getSharedInstance('coasterRepository')
             : new InfrastructureCoasterRepository();
     }
 
     public static function wagonRepository($getShared = true): DomainWagonRepository
     {
         return $getShared
-            ? static::getSharedInstance('wagonRepository')
+            ? self::getSharedInstance('wagonRepository')
             : new InfrastructureWagonRepository();
     }
 }

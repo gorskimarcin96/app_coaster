@@ -4,6 +4,8 @@ namespace App\Coaster\Domain\Model;
 
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
+use DateTimeInterface;
+use InvalidArgumentException;
 
 class Coaster
 {
@@ -14,6 +16,17 @@ class Coaster
         public readonly int $distanceLength,
         public readonly TimeRange $timeRange,
     ) {
+        if ($personNumber <= 0) {
+            throw new InvalidArgumentException("Person number must be greater than 0.");
+        }
+
+        if ($clientNumber <= 0) {
+            throw new InvalidArgumentException("Client number must be greater than 0./s.");
+        }
+
+        if ($distanceLength <= 0) {
+            throw new InvalidArgumentException("Distance length must be greater than 0.");
+        }
     }
 
     public static function register(
@@ -61,7 +74,12 @@ class Coaster
         );
     }
 
-    public function isOpenForDateTime(\DateTimeInterface $dateTime): bool
+    public function fullDistance(): float
+    {
+        return $this->distanceLength * 2;
+    }
+
+    public function isOpenForDateTime(DateTimeInterface $dateTime): bool
     {
         return $this->timeRange->includes($dateTime);
     }

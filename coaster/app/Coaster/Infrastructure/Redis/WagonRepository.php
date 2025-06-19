@@ -63,7 +63,6 @@ final readonly class WagonRepository implements WagonRepositoryInterface
         $redis->set($this->key($entity->coasterId, $entity->id), WagonMapper::toJSON($entity));
     }
 
-
     public function delete(Wagon $entity): void
     {
         /** @var Redis $redis */

@@ -16,15 +16,15 @@ class Coaster
         public readonly int $distanceLength,
         public readonly TimeRange $timeRange,
     ) {
-        if ($personNumber <= 0) {
-            throw new InvalidArgumentException("Person number must be greater than 0.");
+        if ($this->personNumber < 0) {
+            throw new InvalidArgumentException("The number of people must be greater than or equal to zero");
         }
 
-        if ($clientNumber <= 0) {
-            throw new InvalidArgumentException("Client number must be greater than 0./s.");
+        if ($this->clientNumber < 0) {
+            throw new InvalidArgumentException("The number of client must be greater than or equal to zero");
         }
 
-        if ($distanceLength <= 0) {
+        if ($this->distanceLength <= 0) {
             throw new InvalidArgumentException("Distance length must be greater than 0.");
         }
     }
@@ -74,7 +74,7 @@ class Coaster
         );
     }
 
-    public function fullDistance(): float
+    public function calculateFullDistance(): int
     {
         return $this->distanceLength * 2;
     }

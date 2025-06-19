@@ -93,6 +93,31 @@ final class CoasterTest extends CIUnitTestCase
     /**
      * @throws Exception
      */
+    #[DataProvider('calculateFullDistanceDataProvider')]
+    public function testCalculateFullDistance(int $expected, int $distanceLength): void
+    {
+        $entity = Coaster::register(
+            1,
+            1,
+            $distanceLength,
+            new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
+        );
+
+        $this->assertSame($expected, $entity->calculateFullDistance());
+    }
+
+    public static function calculateFullDistanceDataProvider(): array
+    {
+        return [
+            [1000, 500],
+            [2000, 1000],
+            [2690, 1345],
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
     #[DataProvider('isOpenForDateTimeDataProvider')]
     public function testIsOpenForDateTime(bool $expected, string $dateTime, string $from, string $to): void
     {
@@ -159,19 +184,19 @@ final class CoasterTest extends CIUnitTestCase
     {
         return [
             'invalid person number' => [
-                0,
+                -1,
                 10,
                 50000,
             ],
             'invalid client number' => [
                 10,
-                0,
+                -1,
                 50000,
             ],
             'invalid distance length' => [
                 10,
                 10,
-                -50000,
+                0,
             ],
         ];
     }

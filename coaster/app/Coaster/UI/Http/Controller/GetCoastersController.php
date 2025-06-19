@@ -3,7 +3,6 @@
 namespace App\Coaster\UI\Http\Controller;
 
 use App\Coaster\Application\DTO\CoasterDTO;
-use App\Coaster\Application\Mapper\CoasterMapper;
 use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersHandler;
 use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersQuery;
 use App\Coaster\Domain\Model\Coaster;
@@ -21,7 +20,7 @@ final class GetCoastersController extends ResourceController
         $entities = $handler(new GetCoastersQuery());
 
         return $this->respond(
-            array_map(static fn(Coaster $entity): CoasterDTO => CoasterMapper::toDTO($entity), $entities),
+            array_map(static fn(Coaster $entity): array => CoasterDTO::fromEntity($entity)->toArray(), $entities),
             200,
         );
     }

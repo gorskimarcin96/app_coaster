@@ -2,7 +2,7 @@
 
 namespace App\Coaster\UI\Http\Controller;
 
-use App\Coaster\Application\Mapper\CoasterMapper;
+use App\Coaster\Application\DTO\CoasterDTO;
 use App\Coaster\Application\Query\GetCoasterByIdHandler\GetCoasterByIdHandler;
 use App\Coaster\Application\Query\GetCoasterByIdHandler\GetCoasterByIdQuery;
 use App\Coaster\Domain\Repository\CoasterRepository;
@@ -19,7 +19,7 @@ final class GetCoasterController extends ResourceController
         $entity = $handler(new GetCoasterByIdQuery($id));
 
         return $entity
-            ? $this->respond(CoasterMapper::toDTO($entity), 200)
+            ? $this->respond(CoasterDTO::fromEntity($entity)->toArray(), 200)
             : $this->respond([], 404);
     }
 }

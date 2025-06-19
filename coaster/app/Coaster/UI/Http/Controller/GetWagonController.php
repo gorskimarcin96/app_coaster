@@ -2,7 +2,7 @@
 
 namespace App\Coaster\UI\Http\Controller;
 
-use App\Coaster\Application\Mapper\WagonMapper;
+use App\Coaster\Application\DTO\WagonDTO;
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdHandler;
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdQuery;
 use App\Coaster\Domain\Repository\WagonRepository;
@@ -23,7 +23,7 @@ final class GetWagonController extends ResourceController
         $entity = $handler(new GetWagonByIdQuery($coasterId, $wagonId));
 
         return $entity
-            ? $this->respond(WagonMapper::toDTO($entity), 200)
+            ? $this->respond(WagonDTO::fromEntity($entity)->toArray(), 200)
             : $this->respond([], 404);
     }
 }

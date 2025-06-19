@@ -7,8 +7,9 @@ use App\Coaster\Domain\Model\Wagon;
 use DateInterval;
 use DateTimeImmutable;
 use Exception;
+use LogicException;
 
-final readonly class RidePlan
+class RidePlanner
 {
     public function __construct(
         public Wagon $wagon,
@@ -20,9 +21,19 @@ final readonly class RidePlan
     /**
      * @throws Exception
      */
+    public function calculateDurationWagonRide(): DateInterval
+    {
+        return $this->wagon->speed > 0
+            ? new DateInterval('PT' . ceil($this->coaster->calculateFullDistance() / $this->wagon->speed) . 'S')
+            : throw new LogicException("Speed must be greater than zero.");
+    }
+
+    /**
+     * @throws Exception
+     */
     public function calculateWagonEndTime(): DateTimeImmutable
     {
-        return $this->startTime->add($this->wagon->calculateDurationForLength($this->coaster->fullDistance()));
+        return $this->startTime->add($this->calculateDurationWagonRide());
     }
 
     /**
@@ -30,7 +41,7 @@ final readonly class RidePlan
      */
     public function calculateWagonEndTimeWithBreak(): DateTimeImmutable
     {
-        return $this->calculateWagonEndTime()->add(new DateInterval('PT5M'));
+        return $this->calculateWagonEndTime()->add($this->wagon->getBreakDuration());
     }
 
     /**

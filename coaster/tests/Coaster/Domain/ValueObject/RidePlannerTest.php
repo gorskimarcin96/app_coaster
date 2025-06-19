@@ -5,16 +5,31 @@ namespace Coaster\Domain\ValueObject;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\ValueObject\CoasterId;
-use App\Coaster\Domain\ValueObject\RidePlan;
+use App\Coaster\Domain\ValueObject\RidePlanner;
 use App\Coaster\Domain\ValueObject\TimeRange;
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class RidePlanTest extends TestCase
+class RidePlannerTest extends TestCase
 {
+    public function testCalculateDurationWagonRide(): void
+    {
+        $coaster = Coaster::register(
+            1,
+            1,
+            1000,
+            new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
+        );
+        $wagon = Wagon::register(CoasterId::generate(), 1, 25);
+        $ridePlanner = new RidePlanner($wagon, $coaster, new DateTimeImmutable('01-01-2000'));
+
+        $this->assertSame((new DateInterval('PT80S'))->s, $ridePlanner->calculateDurationWagonRide()->s);
+    }
+
     /**
      * @throws Exception
      */
@@ -32,11 +47,11 @@ class RidePlanTest extends TestCase
             new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
         );
         $wagon = Wagon::register(CoasterId::generate(), 1, $speed);
-        $ridePlan = new RidePlan($wagon, $coaster, $startTime);
+        $ridePlanner = new RidePlanner($wagon, $coaster, $startTime);
 
         $this->assertSame(
             $expected->format(DateTimeInterface::ATOM),
-            $ridePlan->calculateWagonEndTime()->format(DateTimeInterface::ATOM),
+            $ridePlanner->calculateWagonEndTime()->format(DateTimeInterface::ATOM),
         );
     }
 
@@ -69,11 +84,11 @@ class RidePlanTest extends TestCase
             new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
         );
         $wagon = Wagon::register(CoasterId::generate(), 1, $speed);
-        $ridePlan = new RidePlan($wagon, $coaster, $startTime);
+        $ridePlanner = new RidePlanner($wagon, $coaster, $startTime);
 
         $this->assertSame(
             $expected->format(DateTimeInterface::ATOM),
-            $ridePlan->calculateWagonEndTimeWithBreak()->format(DateTimeInterface::ATOM),
+            $ridePlanner->calculateWagonEndTimeWithBreak()->format(DateTimeInterface::ATOM),
         );
     }
 
@@ -103,9 +118,9 @@ class RidePlanTest extends TestCase
     ): void {
         $coaster = Coaster::register(1, 1, $distanceLength, new TimeRange($from, $to));
         $wagon = Wagon::register(CoasterId::generate(), 1, $speed);
-        $ridePlan = new RidePlan($wagon, $coaster, $startTime);
+        $ridePlanner = new RidePlanner($wagon, $coaster, $startTime);
 
-        $this->assertSame($expected, $ridePlan->isFeasible());
+        $this->assertSame($expected, $ridePlanner->isFeasible());
     }
 
     public static function isFeasibleDataProvider(): array

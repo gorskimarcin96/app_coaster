@@ -5,6 +5,7 @@ namespace App\Coaster\Domain\Model;
 use App\Coaster\Domain\Exception\WagonAlreadyRunException;
 use App\Coaster\Domain\Exception\WagonHasBreakException;
 use App\Coaster\Domain\ValueObject\CoasterId;
+use App\Coaster\Domain\ValueObject\TimeRange;
 use App\Coaster\Domain\ValueObject\WagonId;
 use DateInterval;
 use DateTimeImmutable;
@@ -96,5 +97,21 @@ class Wagon
             && $this->expectedReturnAt !== null
             && $dateTime >= $this->startedAt
             && $dateTime <= $this->expectedReturnAt;
+    }
+
+    /**
+     * todo - i need unit test!
+     */
+    public function countRidesInTimeRange(TimeRange $timeRange, DateInterval $rideDuration): int
+    {
+        $count = 0;
+        $current = $timeRange->fromDate;
+
+        while ($current <= $timeRange->toDate) {
+            $current = $current->add($rideDuration)->add($this->getBreakDuration());
+            $count++;
+        }
+
+        return $count;
     }
 }

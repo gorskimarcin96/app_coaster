@@ -10,22 +10,22 @@ final readonly class PersonnelManager
     public function checkPersonsInCoasterSystem(array $coastersWagons, Notifier $notifier): void
     {
         foreach ($coastersWagons as $coasterWagons) {
-            if ($coasterWagons->coaster->personNumber < $coasterWagons->requiredPersonalNumber()) {
+            if ($coasterWagons->coaster->personNumber < $coasterWagons->countRequiredPersonalNumber()) {
                 $notifier->notify(
                     sprintf(
                         'The coaster %s needs %s persons.',
                         $coasterWagons->coaster->id,
-                        $coasterWagons->requiredPersonalNumber() - $coasterWagons->coaster->personNumber,
+                        $coasterWagons->countRequiredPersonalNumber() - $coasterWagons->coaster->personNumber,
                     ),
                 );
             }
 
-            if ($coasterWagons->coaster->personNumber > $coasterWagons->requiredPersonalNumber()) {
+            if ($coasterWagons->coaster->personNumber > $coasterWagons->countRequiredPersonalNumber()) {
                 $notifier->notify(
                     sprintf(
                         'The coaster %s has %s persons too many.',
                         $coasterWagons->coaster->id,
-                        $coasterWagons->coaster->personNumber - $coasterWagons->requiredPersonalNumber(),
+                        $coasterWagons->coaster->personNumber - $coasterWagons->countRequiredPersonalNumber(),
                     ),
                 );
             }

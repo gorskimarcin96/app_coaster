@@ -23,7 +23,7 @@ class CoasterWagonsTest extends TestCase
 
         $coasterWagons = new CoasterWagons($coaster, $wagons ?? []);
 
-        $this->assertSame($expected, $coasterWagons->requiredPersonalNumber());
+        $this->assertSame($expected, $coasterWagons->countRequiredPersonalNumber());
     }
 
     public static function requiredPersonalNumberDataProvider(): array

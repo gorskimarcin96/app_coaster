@@ -1,0 +1,38 @@
+POST http://localhost:80/api/coasters
+Content-Type: application/json
+
+{
+  "availablePersonnel": 11,
+  "clientsPerDay": 540,
+  "trackLengthInMeters": 2400,
+  "from": "08:00",
+  "to": "16:00"
+}
+###
+GET http://localhost:80/api/coasters
+###
+GET http://localhost:80/api/coasters/30071e4f-1200-4799-99c0-024b121b75a2
+###
+PUT http://localhost:80/api/coasters/30071e4f-1200-4799-99c0-024b121b75a2
+Content-Type: application/json
+
+{
+  "availablePersonnel": 11,
+  "clientsPerDay": 540,
+  "from": "08:00",
+  "to": "16:00"
+}
+###
+POST http://localhost:80/api/coasters/30071e4f-1200-4799-99c0-024b121b75a2/wagon
+Content-Type: application/json
+
+{
+  "seats": 20,
+  "speedInMetersPerSecond": 1
+}
+###
+GET http://localhost:80/api/coasters/30071e4f-1200-4799-99c0-024b121b75a2/wagon
+###
+GET http://localhost:80/api/coasters/30071e4f-1200-4799-99c0-024b121b75a2/wagon/df4bbf26-b65d-4482-9b0a-f5f354c84bf5
+###
+DELETE http://localhost:80/api/coasters/30071e4f-1200-4799-99c0-024b121b75a2/wagon/1fdf1f70-993e-46ec-834d-c217db7b1cd6

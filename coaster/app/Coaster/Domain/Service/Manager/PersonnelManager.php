@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Domain\Service\Manager;
 
 use App\Coaster\Domain\Service\Notifier\Notifier;
@@ -9,7 +11,7 @@ final readonly class PersonnelManager implements ManagerInterface
 {
     public function handle(CoasterWagons $coasterWagons, Notifier $notifier): void
     {
-        if (!count($coasterWagons->wagons)) {
+        if ($coasterWagons->wagons === []) {
             return;
         }
 

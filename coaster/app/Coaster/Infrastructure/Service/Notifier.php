@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Infrastructure\Service;
 
 use App\Coaster\Domain\Service\Notifier\Notifier as NotifierInterface;

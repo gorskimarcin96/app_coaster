@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\Command\RegisterWagonCommand;
 
 use App\Coaster\Application\Command\Exception\EntityNotFoundException;
@@ -8,7 +10,6 @@ use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\WagonId;
-use CodeIgniter\Exceptions\PageNotFoundException;
 use Exception;
 use Ramsey\Uuid\Uuid;
 

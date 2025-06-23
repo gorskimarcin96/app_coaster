@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Domain\Service\Listener;
 
 use App\Coaster\Domain\Query\GetWagonsQuery;
@@ -28,7 +30,7 @@ final readonly class ManagerListener
     {
         $coasterWagons = new CoasterWagons(
             $this->coasterRepository->get($coasterId),
-            $this->wagonRepository->getByQuery(new GetWagonsQuery($coasterId)),
+            $this->wagonRepository->getByQuery(new GetWagonsQuery($coasterId->getId()->toString())),
         );
 
         foreach ([new ClientManager(), new PersonnelManager()] as $manager) {

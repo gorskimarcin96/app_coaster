@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Domain\Service;
 
 use App\Coaster\Domain\Model\Coaster;

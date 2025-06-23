@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\Command\Exception;
 
-final class EntityNotFoundException extends \Exception
+use Exception;
+
+final class EntityNotFoundException extends Exception
 {
     public function __construct(string $entityName)
     {

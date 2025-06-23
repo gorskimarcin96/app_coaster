@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Infrastructure\AsyncRedis;
 
 use App\Coaster\Domain\AsyncRepository\CoasterRepository as CoasterRepositoryInterface;

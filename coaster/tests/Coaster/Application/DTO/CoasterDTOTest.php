@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Application\DTO;
 
 use App\Coaster\Application\DTO\CoasterDTO;

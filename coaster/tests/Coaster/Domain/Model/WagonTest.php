@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Domain\Model;
 
-use App\Coaster\Domain\Exception\WagonAlreadyRunException;
-use App\Coaster\Domain\Exception\WagonHasBreakException;
+use Iterator;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\WagonId;
 use DateInterval;
-use DateTimeInterface;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ final class WagonTest extends TestCase
         $this->assertIsString($entity->id->getId()->toString());
         $this->assertSame($coasterId->getId()->toString(), $entity->coasterId->getId()->toString());
         $this->assertSame(1, $entity->seats);
-        $this->assertSame(2.2, $entity->speedInMetersPerSecond);
+        $this->assertEqualsWithDelta(2.2, $entity->speedInMetersPerSecond, PHP_FLOAT_EPSILON);
     }
 
     public function testFromPersistence(): void
@@ -35,7 +35,7 @@ final class WagonTest extends TestCase
         $this->assertSame($wagonId->getId()->toString(), $entity->id->getId()->toString());
         $this->assertSame($coasterId->getId()->toString(), $entity->coasterId->getId()->toString());
         $this->assertSame(1, $entity->seats);
-        $this->assertSame(2.2, $entity->speedInMetersPerSecond);
+        $this->assertEqualsWithDelta(2.2, $entity->speedInMetersPerSecond, PHP_FLOAT_EPSILON);
     }
 
     #[DataProvider('invalidArgumentExceptionDataProvider')]
@@ -46,17 +46,15 @@ final class WagonTest extends TestCase
         Wagon::register(CoasterId::generate(), $seats, $speedInMetersPerSecond);
     }
 
-    public static function invalidArgumentExceptionDataProvider(): array
+    public static function invalidArgumentExceptionDataProvider(): Iterator
     {
-        return [
-            'invalid number of places' => [
-                -3,
-                10.0,
-            ],
-            'invalid speedInMetersPerSecond' => [
-                10,
-                -4.2,
-            ],
+        yield 'invalid number of places' => [
+            -3,
+            10.0,
+        ];
+        yield 'invalid speedInMetersPerSecond' => [
+            10,
+            -4.2,
         ];
     }
 

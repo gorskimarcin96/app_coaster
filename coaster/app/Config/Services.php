@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Config;
 
 use App\Coaster\Domain\AsyncRepository\CoasterRepository as DomainCoasterAsyncRepository;
@@ -56,8 +58,8 @@ final class Services extends BaseService
         }
 
         $redis = new Redis();
-        $redis->connect($_ENV['REDIS_HOST'], $_ENV['REDIS_PORT']);
-        $redis->select($_ENV['REDIS_DB']);
+        $redis->connect($_ENV['REDIS_HOST'], (int)$_ENV['REDIS_PORT']);
+        $redis->select((int)$_ENV['REDIS_DB']);
 
         return $redis;
     }

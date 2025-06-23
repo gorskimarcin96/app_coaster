@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Domain\Model;
 
+use Iterator;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use CodeIgniter\Test\CIUnitTestCase;
 use DateTimeImmutable;
-use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -103,24 +105,22 @@ final class CoasterTest extends CIUnitTestCase
         );
     }
 
-    public static function invalidArgumentExceptionDataProvider(): array
+    public static function invalidArgumentExceptionDataProvider(): Iterator
     {
-        return [
-            'invalid person number' => [
-                -1,
-                10,
-                50000,
-            ],
-            'invalid client number' => [
-                10,
-                -1,
-                50000,
-            ],
-            'invalid distance length' => [
-                10,
-                10,
-                0,
-            ],
+        yield 'invalid person number' => [
+            -1,
+            10,
+            50000,
+        ];
+        yield 'invalid client number' => [
+            10,
+            -1,
+            50000,
+        ];
+        yield 'invalid distance length' => [
+            10,
+            10,
+            0,
         ];
     }
 }

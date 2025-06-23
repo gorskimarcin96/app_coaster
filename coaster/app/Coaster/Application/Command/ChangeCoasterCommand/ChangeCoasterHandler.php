@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\Command\ChangeCoasterCommand;
 
+use DateTimeImmutable;
 use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
@@ -26,7 +29,7 @@ final readonly class ChangeCoasterHandler
         $entity = $entity->withUpdatedData(
             $command->availablePersonnel,
             $command->clientsPerDay,
-            new TimeRange(new \DateTimeImmutable($command->from), new \DateTimeImmutable($command->to)),
+            new TimeRange(new DateTimeImmutable($command->from), new DateTimeImmutable($command->to)),
         );
 
         $this->repository->update($entity);

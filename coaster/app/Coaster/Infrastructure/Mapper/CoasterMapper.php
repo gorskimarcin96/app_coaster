@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Infrastructure\Mapper;
 
 use App\Coaster\Domain\Model\Coaster;

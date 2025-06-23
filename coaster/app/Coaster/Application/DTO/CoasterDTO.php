@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\DTO;
 
+use DateTimeInterface;
 use App\Coaster\Domain\Model\Coaster;
 
 final readonly class CoasterDTO
@@ -31,12 +34,12 @@ final readonly class CoasterDTO
     public static function fromEntity(Coaster $entity): self
     {
         return new self(
-            $entity->id,
+            $entity->id->getId()->toString(),
             $entity->availablePersonnel,
             $entity->clientsPerDay,
             $entity->trackLengthInMeters,
-            $entity->timeRange->from->format(\DateTimeInterface::ATOM),
-            $entity->timeRange->to->format(\DateTimeInterface::ATOM),
+            $entity->timeRange->from->format(DateTimeInterface::ATOM),
+            $entity->timeRange->to->format(DateTimeInterface::ATOM),
         );
     }
 }

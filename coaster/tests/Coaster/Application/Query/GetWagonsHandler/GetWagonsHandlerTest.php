@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Application\Query\GetWagonsHandler;
 
 use App\Coaster\Application\Query\GetWagonsHandler\GetWagonsHandler;

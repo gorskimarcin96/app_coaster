@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Domain\Model;
 
+use Exception;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 use App\Coaster\Domain\ValueObject\TimeRange;
@@ -60,7 +63,7 @@ class Wagon
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function calculateDurationWagonRideForDistance(int $distance): DateInterval
     {

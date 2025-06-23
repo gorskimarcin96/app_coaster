@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\Query\GetWagonByIdHandler;
 
 use App\Coaster\Domain\Model\Wagon;

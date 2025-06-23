@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\Query\GetCoastersHandler;
 
 use App\Coaster\Domain\Model\Coaster;
@@ -15,7 +17,7 @@ final readonly class GetCoastersHandler
     /**
      * @return Coaster[]
      */
-    public function __invoke(GetCoastersQuery $query): array
+    public function __invoke(): array
     {
         return $this->repository->getByQuery(new DomainQuery());
     }

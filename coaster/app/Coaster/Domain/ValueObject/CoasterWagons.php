@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Domain\ValueObject;
 
 use App\Coaster\Domain\Exception\CoasterHasNotWagonsException;
@@ -67,7 +69,7 @@ final readonly class CoasterWagons
      */
     public function calculateMissingWagons(): int
     {
-        return ceil($this->coaster->clientsPerDay / $this->averageRideNumberOfClientWagonInDay()) - count($this->wagons);
+        return (int) ceil($this->coaster->clientsPerDay / $this->averageRideNumberOfClientWagonInDay()) - count($this->wagons);
     }
 
     /**
@@ -166,7 +168,7 @@ final readonly class CoasterWagons
     private function averageRideNumberOfClientWagonInDay(): int
     {
         return count($this->wagons)
-            ? floor($this->countRideNumberOfClientInCoasterInDay() / count($this->wagons))
+            ? (int) floor($this->countRideNumberOfClientInCoasterInDay() / count($this->wagons))
             : throw new CoasterHasNotWagonsException($this->coaster->id);
     }
 }

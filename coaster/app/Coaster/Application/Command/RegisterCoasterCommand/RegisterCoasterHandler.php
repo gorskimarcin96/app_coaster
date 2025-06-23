@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\Command\RegisterCoasterCommand;
 
 use App\Coaster\Domain\Model\Coaster;

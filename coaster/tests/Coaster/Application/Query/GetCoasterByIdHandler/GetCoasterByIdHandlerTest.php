@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Application\Query\GetCoasterByIdHandler;
 
 use App\Coaster\Application\Query\GetCoasterByIdHandler\GetCoasterByIdHandler;
@@ -27,7 +29,7 @@ final class GetCoasterByIdHandlerTest extends CIUnitTestCase
             ->willReturn($entity);
 
         $handler = new GetCoasterByIdHandler($repository);
-        $response = $handler(new GetCoasterByIdQuery($entity->id));
+        $response = $handler(new GetCoasterByIdQuery($entity->id->getId()->toString()));
 
         $this->assertSame($entity, $response);
     }

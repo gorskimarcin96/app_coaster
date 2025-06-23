@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Domain\ValueObject;
 
+use Iterator;
+use Exception;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\CoasterStatus;
 use App\Coaster\Domain\Model\Wagon;
@@ -14,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 final class CoasterWagonsTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[DataProvider('countRideNumberOfClientInCoasterInDayDataProvider')]
     public function testCountRideNumberOfClientInCoasterInDay(
@@ -38,15 +42,13 @@ final class CoasterWagonsTest extends TestCase
         $this->assertSame($expected, $coasterWagons->countRideNumberOfClientInCoasterInDay());
     }
 
-    public static function countRideNumberOfClientInCoasterInDayDataProvider(): array
+    public static function countRideNumberOfClientInCoasterInDayDataProvider(): Iterator
     {
-        return [
-            [540, 5, 20, 1, 4800],
-            [1170, 5, 20, 1, 2000],
-            [990, 5, 20, 2, 4800],
-            [324, 3, 20, 1, 4800],
-            [440, 5, 10, 2, 4800],
-        ];
+        yield [540, 5, 20, 1, 4800];
+        yield [1170, 5, 20, 1, 2000];
+        yield [990, 5, 20, 2, 4800];
+        yield [324, 3, 20, 1, 4800];
+        yield [440, 5, 10, 2, 4800];
     }
 
     #[DataProvider('calculateNeedsPersonnelInCasterWithWagonsOfNumberDataProvider')]
@@ -67,17 +69,15 @@ final class CoasterWagonsTest extends TestCase
         $this->assertSame($expected, $coasterWagons->calculateNeedsPersonnelInCasterWithWagonsOfNumber($wagonNumber));
     }
 
-    public static function calculateNeedsPersonnelInCasterWithWagonsOfNumberDataProvider(): array
+    public static function calculateNeedsPersonnelInCasterWithWagonsOfNumberDataProvider(): Iterator
     {
-        return [
-            [1, 0],
-            [3, 1],
-            [21, 10],
-        ];
+        yield [1, 0];
+        yield [3, 1];
+        yield [21, 10];
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[DataProvider('calculateMissingWagonsDataProvider')]
     public function testCalculateMissingWagons(int $expected, int $wagonNumber): void
@@ -98,17 +98,15 @@ final class CoasterWagonsTest extends TestCase
 
     }
 
-    public static function calculateMissingWagonsDataProvider(): array
+    public static function calculateMissingWagonsDataProvider(): Iterator
     {
-        return [
-            [0, 5],
-            [1, 4],
-            [-1, 6],
-        ];
+        yield [0, 5];
+        yield [1, 4];
+        yield [-1, 6];
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[DataProvider('calculateMissingPersonnelDataProvider')]
     public function testCalculateMissingPersonnel(int $expected, int $personnelNumber): void
@@ -133,17 +131,15 @@ final class CoasterWagonsTest extends TestCase
 
     }
 
-    public static function calculateMissingPersonnelDataProvider(): array
+    public static function calculateMissingPersonnelDataProvider(): Iterator
     {
-        return [
-            [0, 11],
-            [1, 10],
-            [-1, 12],
-        ];
+        yield [0, 11];
+        yield [1, 10];
+        yield [-1, 12];
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[DataProvider('calculateExcessWagonsDataProvider')]
     public function testCalculateExcessWagons(int $expected, int $wagonNumber): void
@@ -164,17 +160,15 @@ final class CoasterWagonsTest extends TestCase
 
     }
 
-    public static function calculateExcessWagonsDataProvider(): array
+    public static function calculateExcessWagonsDataProvider(): Iterator
     {
-        return [
-            [0, 5],
-            [-1, 4],
-            [1, 6],
-        ];
+        yield [0, 5];
+        yield [-1, 4];
+        yield [1, 6];
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[DataProvider('calculateExcessPersonnelDataProvider')]
     public function testCalculateExcessPersonnel(int $expected, int $personnelNumber): void
@@ -199,17 +193,15 @@ final class CoasterWagonsTest extends TestCase
 
     }
 
-    public static function calculateExcessPersonnelDataProvider(): array
+    public static function calculateExcessPersonnelDataProvider(): Iterator
     {
-        return [
-            [0, 11],
-            [-1, 10],
-            [1, 12],
-        ];
+        yield [0, 11];
+        yield [-1, 10];
+        yield [1, 12];
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testCalculateNeedsWagons(): void
     {
@@ -234,7 +226,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testCalculateNeedsPersonnel(): void
     {
@@ -258,7 +250,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusExcessWagons(): void
     {
@@ -282,7 +274,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusMissingClients(): void
     {
@@ -298,7 +290,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusMissingWagonsAndPersonnel(): void
     {
@@ -322,7 +314,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusMissingWagons(): void
     {
@@ -346,7 +338,7 @@ final class CoasterWagonsTest extends TestCase
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusMissingPersonnel(): void
     {
@@ -370,7 +362,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusExcessPersonnel(): void
     {
@@ -394,7 +386,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStatusOK(): void
     {

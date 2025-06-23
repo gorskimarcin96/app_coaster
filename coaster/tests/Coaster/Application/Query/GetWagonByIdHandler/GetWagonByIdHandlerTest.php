@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Coaster\Application\Query\GetWagonByIdHandler;
 
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdHandler;
@@ -30,7 +32,7 @@ final class GetWagonByIdHandlerTest extends TestCase
             ->willReturn($entity);
 
         $handler = new GetWagonByIdHandler($repository);
-        $response = $handler(new GetWagonByIdQuery($coasterId, $wagonId));
+        $response = $handler(new GetWagonByIdQuery($coasterId->getId()->toString(), $wagonId->getId()->toString()));
 
         $this->assertSame($entity, $response);
     }

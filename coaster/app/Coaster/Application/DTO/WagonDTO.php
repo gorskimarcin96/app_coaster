@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Application\DTO;
 
 use App\Coaster\Domain\Model\Wagon;
@@ -27,8 +29,8 @@ final readonly class WagonDTO
     public static function fromEntity(Wagon $entity): self
     {
         return new self(
-            $entity->id,
-            $entity->coasterId,
+            $entity->id->getId()->toString(),
+            $entity->coasterId->getId()->toString(),
             $entity->seats,
             $entity->speedInMetersPerSecond,
         );

@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\Domain\Service\Manager;
 
+use Exception;
 use App\Coaster\Domain\Service\Notifier\Notifier;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 
 final readonly class ClientManager implements ManagerInterface
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(CoasterWagons $coasterWagons, Notifier $notifier): void
     {
-        if (!count($coasterWagons->wagons)) {
+        if ($coasterWagons->wagons === []) {
             return;
         }
 

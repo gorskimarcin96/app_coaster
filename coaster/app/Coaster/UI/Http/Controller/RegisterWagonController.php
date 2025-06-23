@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Coaster\UI\Http\Controller;
 
 use App\Coaster\Application\Command\Exception\EntityNotFoundException;

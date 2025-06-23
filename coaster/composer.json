@@ -19,6 +19,7 @@
   "require-dev": {
     "fakerphp/faker": "^1.9",
     "mikey179/vfsstream": "^1.6",
+    "phpdevsr/rector-codeigniter4": "^1.0",
     "phpunit/phpunit": "^10.5.16",
     "symfony/var-dumper": "^7.3"
   },

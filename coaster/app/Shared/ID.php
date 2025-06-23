@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Shared;
 
+use Stringable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-abstract readonly class ID
+abstract readonly class ID implements Stringable
 {
     public function __construct(private UuidInterface $id)
     {

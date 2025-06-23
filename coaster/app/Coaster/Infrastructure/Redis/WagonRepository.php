@@ -3,7 +3,6 @@
 namespace App\Coaster\Infrastructure\Redis;
 
 use App\Coaster\Application\Query\GetWagonsHandler\GetWagonsQuery;
-use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\Repository\WagonRepository as WagonRepositoryInterface;
 use App\Coaster\Domain\ValueObject\CoasterId;
@@ -31,7 +30,7 @@ final readonly class WagonRepository implements WagonRepositoryInterface
     }
 
     /**
-     * @return Coaster[]
+     * @return Wagon[]
      * @throws Exception
      */
     public function getByQuery(GetWagonsQuery $query): array

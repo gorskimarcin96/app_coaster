@@ -60,67 +60,11 @@ final class WagonTest extends TestCase
         ];
     }
 
-    public function testRun(): void
-    {
-        $entity = Wagon::register(CoasterId::generate(), 1, 2.2)
-            ->run(new \DateTimeImmutable('01-01-2000'), new DateInterval('PT30M'));
-
-        $this->assertSame(
-            (new \DateTimeImmutable('01-01-2000'))->format(DateTimeInterface::ATOM),
-            $entity->startedAt->format(DateTimeInterface::ATOM),
-        );
-        $this->assertSame(
-            (new \DateTimeImmutable('01-01-2000 00:30'))->format(DateTimeInterface::ATOM),
-            $entity->expectedReturnAt->format(DateTimeInterface::ATOM),
-        );
-    }
-
-    public function testRunWhenWagonAlreadyRun(): void
-    {
-        $this->expectException(WagonAlreadyRunException::class);
-
-        Wagon::register(CoasterId::generate(), 1, 2.2)
-            ->run(new \DateTimeImmutable('01-01-2000'), new DateInterval('PT30M'))
-            ->run(new \DateTimeImmutable('01-01-2000 00:05'), new DateInterval('PT30M'));
-    }
-
-    public function testRunWhenWagonHasBreak(): void
-    {
-        $this->expectException(WagonHasBreakException::class);
-
-        Wagon::register(CoasterId::generate(), 1, 2.2)
-            ->run(new \DateTimeImmutable('01-01-2000'), new DateInterval('PT30M'))
-            ->run(new \DateTimeImmutable('01-01-2000 00:32'), new DateInterval('PT30M'));
-    }
-
     public function getBreakDuration(): void
     {
         $this->assertInstanceOf(
             DateInterval::class,
             Wagon::register(CoasterId::generate(), 1, 2.2)->getBreakDuration(),
         );
-    }
-
-    public function testIsRunningAtWhenIsNotRun(): void
-    {
-        $entity = Wagon::register(CoasterId::generate(), 1, 2.2);
-
-        $this->assertFalse($entity->isRunningAt(new \DateTimeImmutable()));
-    }
-
-    public function testIsRunningAtWhenIsRun(): void
-    {
-        $entity = Wagon::register(CoasterId::generate(), 1, 2.2)
-            ->run(new \DateTimeImmutable(), new DateInterval('PT30M'));
-
-        $this->assertTrue($entity->isRunningAt(new \DateTimeImmutable()));
-    }
-
-    public function testIsRunningAtWhenIsBack(): void
-    {
-        $entity = Wagon::register(CoasterId::generate(), 1, 2.2)
-            ->run(new \DateTimeImmutable('2000-01-01'), new DateInterval('PT30M'));
-
-        $this->assertFalse($entity->isRunningAt(new \DateTimeImmutable('2000-01-01 00:30:01')));
     }
 }

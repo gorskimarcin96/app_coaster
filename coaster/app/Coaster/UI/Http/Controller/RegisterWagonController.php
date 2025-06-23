@@ -8,10 +8,13 @@ use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonCommand;
 use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonHandler;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
-use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Coaster\Domain\ValueObject\CoasterId;
+use App\Coaster\Infrastructure\Events\EventRegistrar;
+use CodeIgniter\Events\Events;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 final class RegisterWagonController extends ResourceController
 {
@@ -30,6 +33,8 @@ final class RegisterWagonController extends ResourceController
             $id = $handler(
                 RegisterWagonCommand::fromArray((array)$this->request->getJSON() + ['coasterId' => $coasterId]),
             );
+
+            Events::trigger(EventRegistrar::WAGON_CREATED, new CoasterId(Uuid::fromString($coasterId)));
 
             return $this->respond(['id' => $id->getId()->toString()], 201);
         } catch (InvalidCommandArgumentException $exception) {

@@ -4,8 +4,8 @@ namespace Coaster\Domain\Service;
 
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
+use App\Coaster\Domain\Service\Manager\PersonnelManager;
 use App\Coaster\Domain\Service\Notifier;
-use App\Coaster\Domain\Service\PersonnelManager;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use DateTimeImmutable;
@@ -17,13 +17,20 @@ final class PersonnelManagerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testCheckPersonsInCoasterSystemWhenHasEqualPersonnel(): void
+    public function testWhenHasEqualPersonnel(): void
     {
-        $coaster = Coaster::register(7, 2, 10, new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()));
+        $coaster = Coaster::register(
+            11,
+            540,
+            2400,
+            new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
+        );
         $wagons = [
-            Wagon::register($coaster->id, 1, 2.2),
-            Wagon::register($coaster->id, 1, 2.2),
-            Wagon::register($coaster->id, 1, 2.2),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
         ];
 
         $notifier = $this->createMock(Notifier::class);
@@ -31,20 +38,26 @@ final class PersonnelManagerTest extends TestCase
             ->method('notify');
 
         $manager = new PersonnelManager();
-        $manager->checkPersonsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
      * @throws Exception
      */
-    public function testCheckPersonsInCoasterSystemWhenNeedsMorePersonnel(): void
+    public function testWhenNeedsMorePersonnel(): void
     {
-        $coaster = Coaster::register(7, 2, 10, new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()));
+        $coaster = Coaster::register(
+            9,
+            540,
+            2400,
+            new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
+        );
         $wagons = [
-            Wagon::register($coaster->id, 1, 2.2),
-            Wagon::register($coaster->id, 1, 2.2),
-            Wagon::register($coaster->id, 1, 2.2),
-            Wagon::register($coaster->id, 1, 2.2),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
         ];
 
         $notifier = $this->createMock(Notifier::class);
@@ -53,18 +66,26 @@ final class PersonnelManagerTest extends TestCase
             ->with(sprintf('The coaster %s needs %s persons.', $coaster->id, 2));
 
         $manager = new PersonnelManager();
-        $manager->checkPersonsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
      * @throws Exception
      */
-    public function testCheckPersonsInCoasterSystemWhenHasToManyPersonnel(): void
+    public function testWhenHasToManyPersonnel(): void
     {
-        $coaster = Coaster::register(7, 2, 10, new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()));
+        $coaster = Coaster::register(
+            13,
+            540,
+            2400,
+            new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
+        );
         $wagons = [
-            Wagon::register($coaster->id, 1, 2.2),
-            Wagon::register($coaster->id, 1, 2.2),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
+            Wagon::register($coaster->id, 20, 1),
         ];
 
         $notifier = $this->createMock(Notifier::class);
@@ -73,6 +94,6 @@ final class PersonnelManagerTest extends TestCase
             ->with(sprintf('The coaster %s has %s persons too many.', $coaster->id, 2));
 
         $manager = new PersonnelManager();
-        $manager->checkPersonsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 }

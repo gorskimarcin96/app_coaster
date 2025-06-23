@@ -2,15 +2,13 @@
 
 namespace App\Coaster\Domain\Model;
 
-use App\Coaster\Domain\Exception\WagonAlreadyRunException;
-use App\Coaster\Domain\Exception\WagonHasBreakException;
 use App\Coaster\Domain\ValueObject\CoasterId;
+use App\Coaster\Domain\ValueObject\CoasterWagons;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use App\Coaster\Domain\ValueObject\WagonId;
 use DateInterval;
-use DateTimeImmutable;
-use DateTimeInterface;
 use InvalidArgumentException;
+use LogicException;
 
 class Wagon
 {
@@ -19,19 +17,18 @@ class Wagon
         public readonly CoasterId $coasterId,
         public readonly int $numberOfPlaces,
         public readonly float $speed,
-        public readonly ?DateTimeImmutable $startedAt = null,
-        public readonly ?DateTimeImmutable $expectedReturnAt = null,
     ) {
         if ($this->speed <= 0) {
             throw new InvalidArgumentException("Speed must be greater than 0 m/s.");
         }
 
         if ($this->numberOfPlaces < 0) {
-            throw new InvalidArgumentException("The number of places must be greater than or equal to zero.");
-        }
-
-        if ($this->startedAt > $this->expectedReturnAt) {
-            throw new InvalidArgumentException("Started at must be greater than excepted return at.");
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The number of places must be greater than or equal to %s',
+                    CoasterWagons::REQUIRED_PERSONNEL_TO_WAGONS,
+                ),
+            );
         }
     }
 
@@ -53,50 +50,28 @@ class Wagon
         CoasterId $coasterId,
         int $numberOfPlaces,
         float $speed,
-        ?DateTimeImmutable $startedAt = null,
-        ?DateTimeImmutable $expectedReturnAt = null,
     ): Wagon {
         return new Wagon(
             $id,
             $coasterId,
             $numberOfPlaces,
             $speed,
-            $startedAt,
-            $expectedReturnAt,
         );
     }
 
-    public function run(DateTimeImmutable $startTime, DateInterval $rideDuration): Wagon
+    /**
+     * @throws \Exception
+     */
+    public function calculateDurationWagonRideForDistance(int $distance): DateInterval
     {
-        if ($this->expectedReturnAt !== null && $this->expectedReturnAt >= $startTime) {
-            throw new WagonAlreadyRunException($this->id);
-        }
-
-        if ($this->expectedReturnAt !== null && $this->expectedReturnAt->add($this->getBreakDuration()) >= $startTime) {
-            throw new WagonHasBreakException($this->id);
-        }
-
-        return new Wagon(
-            $this->id,
-            $this->coasterId,
-            $this->numberOfPlaces,
-            $this->speed,
-            $startTime,
-            $startTime->add($rideDuration),
-        );
+        return $this->speed > 0
+            ? new DateInterval('PT' . ceil($distance / $this->speed) . 'S')
+            : throw new LogicException("Speed must be greater than zero.");
     }
 
     public function getBreakDuration(): DateInterval
     {
         return new DateInterval('PT5M');
-    }
-
-    public function isRunningAt(DateTimeInterface $dateTime): bool
-    {
-        return $this->startedAt !== null
-            && $this->expectedReturnAt !== null
-            && $dateTime >= $this->startedAt
-            && $dateTime <= $this->expectedReturnAt;
     }
 
     /**

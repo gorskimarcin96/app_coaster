@@ -22,10 +22,7 @@ final class GetWagonsControllerTest extends AbstractApiTestCase
         $responseData = json_decode($response->getJSON(), true, 512, JSON_THROW_ON_ERROR);
 
         array_map(
-            fn(array $row) => $this->assertStructure(
-                ['id', 'coasterId', 'numberOfPlaces', 'speed', 'startedAt', 'expectedReturnAt'],
-                $row,
-            ),
+            fn(array $row) => $this->assertStructure(['id', 'coasterId', 'numberOfPlaces', 'speed'], $row),
             $responseData,
         );
     }

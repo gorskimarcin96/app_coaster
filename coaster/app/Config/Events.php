@@ -53,3 +53,4 @@ Events::on('pre_system', static function (): void {
         }
     }
 });
+\App\Coaster\Infrastructure\Events\EventRegistrar::register();

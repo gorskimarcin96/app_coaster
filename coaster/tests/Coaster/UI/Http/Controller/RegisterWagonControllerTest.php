@@ -15,7 +15,7 @@ final class RegisterWagonControllerTest extends AbstractApiTestCase
     {
         $entity = $this->createCoaster();
         $payload = [
-            'numberOfPlaces' => 2,
+            'numberOfPlaces' => 20,
             'speed' => 2.6,
             'coasterId' => $entity->id->getId()->toString(),
         ];

@@ -3,14 +3,52 @@
 namespace Config;
 
 use App\Coaster\Domain\Repository\CoasterRepository as DomainCoasterRepository;
+use App\Coaster\Domain\Service\Notifier as DomainNotifier;
+use App\Coaster\Infrastructure\Service\Notifier as InfrastructureNotifier;
 use App\Coaster\Infrastructure\Redis\CoasterRepository as InfrastructureCoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository as DomainWagonRepository;
 use App\Coaster\Infrastructure\Redis\WagonRepository as InfrastructureWagonRepository;
+use App\Coaster\Domain\AsyncRepository\CoasterRepository as DomainCoasterAsyncRepository;
+use App\Coaster\Infrastructure\AsyncRedis\CoasterRepository as InfrastructureCoasterAsyncRepository;
+use App\Coaster\Domain\AsyncRepository\WagonRepository as DomainWagonAsyncRepository;
+use App\Coaster\Infrastructure\AsyncRedis\WagonRepository as InfrastructureWagonAsyncRepository;
+use Clue\React\Redis\Client;
+use Clue\React\Redis\Factory;
 use CodeIgniter\Config\BaseService;
 use Redis;
 
 final class Services extends BaseService
 {
+    public static function notifier(bool $getShared = true): DomainNotifier
+    {
+        return $getShared
+            ? self::getSharedInstance('notifier')
+            : new InfrastructureNotifier();
+
+    }
+
+    public static function asyncRedis(bool $getShared = true): Client
+    {
+        return $getShared
+            ? self::getSharedInstance('asyncRedis')
+            : (new Factory())->createLazyClient($_ENV['REDIS_HOST'] . ':' . $_ENV['REDIS_PORT']);
+
+    }
+
+    public static function coasterAsyncRepository($getShared = true): DomainCoasterAsyncRepository
+    {
+        return $getShared
+            ? self::getSharedInstance('coasterAsyncRepository')
+            : new InfrastructureCoasterAsyncRepository();
+    }
+
+    public static function wagonAsyncRepository($getShared = true): DomainWagonAsyncRepository
+    {
+        return $getShared
+            ? self::getSharedInstance('wagonAsyncRepository')
+            : new InfrastructureWagonAsyncRepository();
+    }
+
     public static function redis($getShared = true): Redis
     {
         if ($getShared) {

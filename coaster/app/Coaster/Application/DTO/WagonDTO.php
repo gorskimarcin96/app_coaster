@@ -3,8 +3,6 @@
 namespace App\Coaster\Application\DTO;
 
 use App\Coaster\Domain\Model\Wagon;
-use DateTimeImmutable;
-use DateTimeInterface;
 
 final readonly class WagonDTO
 {
@@ -13,8 +11,6 @@ final readonly class WagonDTO
         public string $coasterId,
         public int $numberOfPlaces,
         public float $speed,
-        public ?DateTimeImmutable $startedAt,
-        public ?DateTimeImmutable $expectedReturnAt,
     ) {
     }
 
@@ -25,8 +21,6 @@ final readonly class WagonDTO
             'coasterId' => $this->coasterId,
             'numberOfPlaces' => $this->numberOfPlaces,
             'speed' => $this->speed,
-            'startedAt' => $this->startedAt?->format(DateTimeInterface::ATOM),
-            'expectedReturnAt' => $this->expectedReturnAt?->format(DateTimeInterface::ATOM),
         ];
     }
 
@@ -37,8 +31,6 @@ final readonly class WagonDTO
             $entity->coasterId,
             $entity->numberOfPlaces,
             $entity->speed,
-            $entity->startedAt,
-            $entity->expectedReturnAt,
         );
     }
 }

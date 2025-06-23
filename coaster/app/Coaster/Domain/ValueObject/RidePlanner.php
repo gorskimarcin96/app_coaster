@@ -21,7 +21,7 @@ class RidePlanner
     /**
      * @throws Exception
      */
-    public function calculateDurationWagonRide(): DateInterval
+    private function calculateDurationWagonRide(): DateInterval
     {
         return $this->wagon->speed > 0
             ? new DateInterval('PT' . ceil($this->coaster->calculateFullDistance() / $this->wagon->speed) . 'S')

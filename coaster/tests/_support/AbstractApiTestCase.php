@@ -11,7 +11,6 @@ use App\Coaster\Domain\ValueObject\TimeRange;
 use App\Coaster\Domain\ValueObject\WagonId;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
-use DateInterval;
 use DateTimeImmutable;
 use Exception;
 use Redis;
@@ -38,11 +37,11 @@ abstract class AbstractApiTestCase extends CIUnitTestCase
      * @throws Exception
      */
     protected function createCoaster(
-        int $personNumber = 1,
-        int $clientNumber = 2,
-        int $distanceLength = 10,
-        string $from = '01-01-2000',
-        string $to = '07-01-2000',
+        int $personNumber = 11,
+        int $clientNumber = 540,
+        int $distanceLength = 2400,
+        string $from = '08:00',
+        string $to = '16:00',
     ): Coaster {
         /** @var CoasterRepository $repository */
         $repository = service('coasterRepository');
@@ -71,17 +70,12 @@ abstract class AbstractApiTestCase extends CIUnitTestCase
      */
     protected function createWagon(
         CoasterId $coasterId,
-        int $numberOfPlaces = 10,
-        float $speed = 2.2,
-        ?DateTimeImmutable $startTime = null,
-        ?DateInterval $rideDuration = null,
+        int $numberOfPlaces = 20,
+        float $speed = 1.1,
     ): Wagon {
         /** @var WagonRepository $repository */
         $repository = service('wagonRepository');
         $entity = Wagon::register($coasterId, $numberOfPlaces, $speed);
-        $entity = $startTime && $rideDuration
-            ? $entity->run($startTime, $rideDuration)
-            : $entity;
 
         $repository->save($entity);
 

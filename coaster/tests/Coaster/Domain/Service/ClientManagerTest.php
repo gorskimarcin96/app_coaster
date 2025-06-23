@@ -4,7 +4,7 @@ namespace Coaster\Domain\Service;
 
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
-use App\Coaster\Domain\Service\ClientManager;
+use App\Coaster\Domain\Service\Manager\ClientManager;
 use App\Coaster\Domain\Service\Notifier;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 use App\Coaster\Domain\ValueObject\TimeRange;
@@ -12,7 +12,7 @@ use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-class ClientManagerTest extends TestCase
+final class ClientManagerTest extends TestCase
 {
     /**
      * @throws Exception|\Exception
@@ -38,7 +38,7 @@ class ClientManagerTest extends TestCase
             ->method('notify');
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
@@ -65,7 +65,7 @@ class ClientManagerTest extends TestCase
             ->method('notify');
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
@@ -92,7 +92,7 @@ class ClientManagerTest extends TestCase
             ->with(sprintf('The coaster %s needs %s more wagons.', $coaster->id, 1));
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
@@ -102,7 +102,7 @@ class ClientManagerTest extends TestCase
     {
         $coaster = Coaster::register(
             10,
-            540,
+            500,
             2400,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
@@ -120,7 +120,7 @@ class ClientManagerTest extends TestCase
             ->with(sprintf('The coaster %s needs %s more personnel.', $coaster->id, 1));
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
@@ -151,7 +151,7 @@ class ClientManagerTest extends TestCase
             );
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
 
         $this->assertCount(2, $messages);
         $this->assertSame(sprintf('The coaster %s needs %s more wagons.', $coaster->id, 1), $messages[0]);
@@ -183,7 +183,7 @@ class ClientManagerTest extends TestCase
             ->with(sprintf('The coaster %s has %s wagons too many.', $coaster->id, 2));
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
     }
 
     /**
@@ -215,7 +215,7 @@ class ClientManagerTest extends TestCase
             );
 
         $manager = new ClientManager();
-        $manager->checkClientsInCoasterSystem([new CoasterWagons($coaster, $wagons)], $notifier);
+        $manager->handle(new CoasterWagons($coaster, $wagons), $notifier);
 
         $this->assertCount(2, $messages);
         $this->assertSame(sprintf('The coaster %s has %s wagons too many.', $coaster->id, 2), $messages[0]);

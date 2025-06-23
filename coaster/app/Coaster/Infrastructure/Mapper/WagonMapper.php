@@ -19,8 +19,8 @@ final readonly class WagonMapper
             [
                 'id' => $entity->id->getId()->toString(),
                 'coasterId' => $entity->coasterId->getId()->toString(),
-                'numberOfPlaces' => $entity->numberOfPlaces,
-                'speed' => $entity->speed,
+                'seats' => $entity->seats,
+                'speedInMetersPerSecond' => $entity->speedInMetersPerSecond,
             ],
             JSON_THROW_ON_ERROR,
         );
@@ -36,8 +36,8 @@ final readonly class WagonMapper
         return Wagon::fromPersistence(
             new WagonId(Uuid::fromString($data['id'])),
             new CoasterId(Uuid::fromString($data['coasterId'])),
-            $data['numberOfPlaces'],
-            $data['speed'],
+            $data['seats'],
+            $data['speedInMetersPerSecond'],
         );
     }
 }

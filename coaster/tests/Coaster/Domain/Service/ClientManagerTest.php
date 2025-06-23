@@ -5,7 +5,7 @@ namespace Coaster\Domain\Service;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\Service\Manager\ClientManager;
-use App\Coaster\Domain\Service\Notifier;
+use App\Coaster\Domain\Service\Notifier\Notifier;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use DateTimeImmutable;
@@ -22,7 +22,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             11,
             540,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [
@@ -49,7 +49,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             11,
             500,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [
@@ -76,7 +76,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             11,
             540,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [
@@ -103,7 +103,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             10,
             500,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [
@@ -131,7 +131,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             10,
             540,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [
@@ -166,7 +166,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             7,
             270,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [
@@ -194,7 +194,7 @@ final class ClientManagerTest extends TestCase
         $coaster = Coaster::register(
             10,
             270,
-            2400,
+            4800,
             new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
         $wagons = [

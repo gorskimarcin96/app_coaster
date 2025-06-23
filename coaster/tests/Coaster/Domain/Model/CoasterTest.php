@@ -15,57 +15,57 @@ final class CoasterTest extends CIUnitTestCase
 {
     public function testRegister(): void
     {
-        $personNumber = 2;
-        $clientNumber = 1;
-        $distanceLength = 3;
+        $availablePersonnel = 2;
+        $clientsPerDay = 1;
+        $trackLengthInMeters = 3;
         $from = new DateTimeImmutable('01-01-2000');
         $to = new DateTimeImmutable('07-01-2000');
 
-        $entity = Coaster::register($personNumber, $clientNumber, $distanceLength, new TimeRange($from, $to));
+        $entity = Coaster::register($availablePersonnel, $clientsPerDay, $trackLengthInMeters, new TimeRange($from, $to));
 
         $this->assertIsString($entity->id->getId()->toString());
-        $this->assertSame($clientNumber, $entity->clientNumber);
-        $this->assertSame($personNumber, $entity->personNumber);
-        $this->assertSame($distanceLength, $entity->distanceLength);
-        $this->assertSame($from, $entity->timeRange->fromDate);
-        $this->assertSame($to, $entity->timeRange->toDate);
+        $this->assertSame($clientsPerDay, $entity->clientsPerDay);
+        $this->assertSame($availablePersonnel, $entity->availablePersonnel);
+        $this->assertSame($trackLengthInMeters, $entity->trackLengthInMeters);
+        $this->assertSame($from, $entity->timeRange->from);
+        $this->assertSame($to, $entity->timeRange->to);
     }
 
     public function testRegisterWithInvalidTimeRange(): void
     {
-        $personNumber = 2;
-        $clientNumber = 1;
-        $distanceLength = 3;
+        $availablePersonnel = 2;
+        $clientsPerDay = 1;
+        $trackLengthInMeters = 3;
         $from = new DateTimeImmutable('07-01-2000');
         $to = new DateTimeImmutable('01-01-2000');
 
         $this->expectException(InvalidArgumentException::class);
-        Coaster::register($personNumber, $clientNumber, $distanceLength, new TimeRange($from, $to));
+        Coaster::register($availablePersonnel, $clientsPerDay, $trackLengthInMeters, new TimeRange($from, $to));
     }
 
     public function testFromPersistence(): void
     {
         $id = CoasterId::generate();
-        $personNumber = 2;
-        $clientNumber = 1;
-        $distanceLength = 3;
+        $availablePersonnel = 2;
+        $clientsPerDay = 1;
+        $trackLengthInMeters = 3;
         $from = new DateTimeImmutable('01-01-2000');
         $to = new DateTimeImmutable('07-01-2000');
 
         $entity = Coaster::fromPersistence(
             $id,
-            $personNumber,
-            $clientNumber,
-            $distanceLength,
+            $availablePersonnel,
+            $clientsPerDay,
+            $trackLengthInMeters,
             new TimeRange($from, $to),
         );
 
         $this->assertSame($id, $entity->id);
-        $this->assertSame($clientNumber, $entity->clientNumber);
-        $this->assertSame($personNumber, $entity->personNumber);
-        $this->assertSame($distanceLength, $entity->distanceLength);
-        $this->assertSame($from, $entity->timeRange->fromDate);
-        $this->assertSame($to, $entity->timeRange->toDate);
+        $this->assertSame($clientsPerDay, $entity->clientsPerDay);
+        $this->assertSame($availablePersonnel, $entity->availablePersonnel);
+        $this->assertSame($trackLengthInMeters, $entity->trackLengthInMeters);
+        $this->assertSame($from, $entity->timeRange->from);
+        $this->assertSame($to, $entity->timeRange->to);
     }
 
     public function testWithUpdatedData(): void
@@ -78,104 +78,27 @@ final class CoasterTest extends CIUnitTestCase
             new TimeRange(new DateTimeImmutable('01-01-2000'), new DateTimeImmutable('01-01-2000')),
         );
 
-        $personNumber = 2;
-        $clientNumber = 1;
+        $availablePersonnel = 2;
+        $clientsPerDay = 1;
         $from = new DateTimeImmutable('02-01-2000');
         $to = new DateTimeImmutable('05-01-2000');
-        $entity = $entity->withUpdatedData($personNumber, $clientNumber, new TimeRange($from, $to));
+        $entity = $entity->withUpdatedData($availablePersonnel, $clientsPerDay, new TimeRange($from, $to));
 
-        $this->assertSame($clientNumber, $entity->clientNumber);
-        $this->assertSame($personNumber, $entity->personNumber);
-        $this->assertSame($from, $entity->timeRange->fromDate);
-        $this->assertSame($to, $entity->timeRange->toDate);
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[DataProvider('calculateFullDistanceDataProvider')]
-    public function testCalculateFullDistance(int $expected, int $distanceLength): void
-    {
-        $entity = Coaster::register(
-            1,
-            1,
-            $distanceLength,
-            new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
-        );
-
-        $this->assertSame($expected, $entity->calculateFullDistance());
-    }
-
-    public static function calculateFullDistanceDataProvider(): array
-    {
-        return [
-            [1000, 500],
-            [2000, 1000],
-            [2690, 1345],
-        ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[DataProvider('isOpenForDateTimeDataProvider')]
-    public function testIsOpenForDateTime(bool $expected, string $dateTime, string $from, string $to): void
-    {
-        $entity = Coaster::register(
-            1,
-            1,
-            1,
-            new TimeRange(new DateTimeImmutable($from), new DateTimeImmutable($to)),
-        );
-
-        $this->assertSame($expected, $entity->isOpenForDateTime(new DateTimeImmutable($dateTime)));
-    }
-
-    public static function isOpenForDateTimeDataProvider(): array
-    {
-        return [
-            'inside range' => [
-                true,
-                '2025-06-17 09:00',
-                '2025-06-17 08:00',
-                '2025-06-17 16:00',
-            ],
-            'before range' => [
-                false,
-                '2025-06-17 07:00',
-                '2025-06-17 08:00',
-                '2025-06-17 16:00',
-            ],
-            'after range' => [
-                false,
-                '2025-06-17 17:00',
-                '2025-06-17 08:00',
-                '2025-06-17 16:00',
-            ],
-            'exactly at to' => [
-                true,
-                '2025-06-17 16:00',
-                '2025-06-17 08:00',
-                '2025-06-17 16:00',
-            ],
-            'exactly at from' => [
-                true,
-                '2025-06-17 08:00',
-                '2025-06-17 08:00',
-                '2025-06-17 16:00',
-            ],
-        ];
+        $this->assertSame($clientsPerDay, $entity->clientsPerDay);
+        $this->assertSame($availablePersonnel, $entity->availablePersonnel);
+        $this->assertSame($from, $entity->timeRange->from);
+        $this->assertSame($to, $entity->timeRange->to);
     }
 
     #[DataProvider('invalidArgumentExceptionDataProvider')]
-    public function testInvalidArgumentException(int $personNumber, int $clientNumber, int $distanceLength): void
+    public function testInvalidArgumentException(int $availablePersonnel, int $clientsPerDay, int $trackLengthInMeters): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         Coaster::register(
-            $personNumber,
-            $clientNumber,
-            $distanceLength,
+            $availablePersonnel,
+            $clientsPerDay,
+            $trackLengthInMeters,
             new TimeRange(new DateTimeImmutable(), new DateTimeImmutable()),
         );
     }

@@ -2,11 +2,11 @@
 
 namespace App\Coaster\Domain\Service\Listener;
 
-use App\Coaster\Application\Query\GetWagonsHandler\GetWagonsQuery;
+use App\Coaster\Domain\Query\GetWagonsQuery;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Service\Manager\ClientManager;
 use App\Coaster\Domain\Service\Manager\PersonnelManager;
-use App\Coaster\Domain\Service\Notifier;
+use App\Coaster\Domain\Service\Notifier\Notifier;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 use App\Coaster\Infrastructure\Redis\WagonRepository;

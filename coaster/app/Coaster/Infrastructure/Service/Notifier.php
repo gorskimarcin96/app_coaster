@@ -2,7 +2,7 @@
 
 namespace App\Coaster\Infrastructure\Service;
 
-use App\Coaster\Domain\Service\Notifier as NotifierInterface;
+use App\Coaster\Domain\Service\Notifier\Notifier as NotifierInterface;
 
 final readonly class Notifier implements NotifierInterface
 {

@@ -4,83 +4,72 @@ namespace App\Coaster\Domain\Model;
 
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
-use DateTimeInterface;
 use InvalidArgumentException;
 
 class Coaster
 {
     private function __construct(
         public readonly CoasterId $id,
-        public readonly int $personNumber,
-        public readonly int $clientNumber,
-        public readonly int $distanceLength,
+        public readonly int $availablePersonnel,
+        public readonly int $clientsPerDay,
+        public readonly int $trackLengthInMeters,
         public readonly TimeRange $timeRange,
     ) {
-        if ($this->personNumber < 0) {
-            throw new InvalidArgumentException("The number of people must be greater than or equal to zero");
+        if ($this->availablePersonnel < 0) {
+            throw new InvalidArgumentException("The number of available personnel must be greater than or equal to zero");
         }
 
-        if ($this->clientNumber < 0) {
-            throw new InvalidArgumentException("The number of client must be greater than or equal to zero");
+        if ($this->clientsPerDay < 0) {
+            throw new InvalidArgumentException("The number of client per day must be greater than or equal to zero");
         }
 
-        if ($this->distanceLength <= 0) {
-            throw new InvalidArgumentException("Distance length must be greater than 0.");
+        if ($this->trackLengthInMeters <= 0) {
+            throw new InvalidArgumentException("Track length must be greater than 0.");
         }
     }
 
     public static function register(
-        int $personNumber,
-        int $clientNumber,
-        int $distanceLength,
+        int $availablePersonnel,
+        int $clientsPerDay,
+        int $trackLengthInMeters,
         TimeRange $timeRange,
     ): Coaster {
         return new Coaster(
             CoasterId::generate(),
-            $personNumber,
-            $clientNumber,
-            $distanceLength,
+            $availablePersonnel,
+            $clientsPerDay,
+            $trackLengthInMeters,
             $timeRange,
         );
     }
 
     public static function fromPersistence(
         CoasterId $id,
-        int $personNumber,
-        int $clientNumber,
-        int $distanceLength,
+        int $availablePersonnel,
+        int $clientsPerDay,
+        int $trackLengthInMeters,
         TimeRange $timeRange,
     ): Coaster {
         return new Coaster(
             $id,
-            $personNumber,
-            $clientNumber,
-            $distanceLength,
+            $availablePersonnel,
+            $clientsPerDay,
+            $trackLengthInMeters,
             $timeRange,
         );
     }
 
     public function withUpdatedData(
-        int $personNumber,
-        int $clientNumber,
+        int $availablePersonnel,
+        int $clientsPerDay,
         TimeRange $timeRange,
     ): Coaster {
         return new Coaster(
             $this->id,
-            $personNumber,
-            $clientNumber,
-            $this->distanceLength,
+            $availablePersonnel,
+            $clientsPerDay,
+            $this->trackLengthInMeters,
             $timeRange,
         );
-    }
-
-    public function calculateFullDistance(): int
-    {
-        return $this->distanceLength * 2;
-    }
-
-    public function isOpenForDateTime(DateTimeInterface $dateTime): bool
-    {
-        return $this->timeRange->includes($dateTime);
     }
 }

@@ -8,11 +8,11 @@ final readonly class CoasterDTO
 {
     private function __construct(
         private string $id,
-        private int $personNumber,
-        private int $clientNumber,
-        private int $distanceLength,
-        private string $fromDate,
-        private string $toDate,
+        private int $availablePersonnel,
+        private int $clientsPerDay,
+        private int $trackLengthInMeters,
+        private string $from,
+        private string $to,
     ) {
     }
 
@@ -20,11 +20,11 @@ final readonly class CoasterDTO
     {
         return [
             'id' => $this->id,
-            'personNumber' => $this->personNumber,
-            'clientNumber' => $this->clientNumber,
-            'distanceLength' => $this->distanceLength,
-            'fromDate' => $this->fromDate,
-            'toDate' => $this->toDate,
+            'availablePersonnel' => $this->availablePersonnel,
+            'clientsPerDay' => $this->clientsPerDay,
+            'trackLengthInMeters' => $this->trackLengthInMeters,
+            'from' => $this->from,
+            'to' => $this->to,
         ];
     }
 
@@ -32,11 +32,11 @@ final readonly class CoasterDTO
     {
         return new self(
             $entity->id,
-            $entity->personNumber,
-            $entity->clientNumber,
-            $entity->distanceLength,
-            $entity->timeRange->fromDate->format(\DateTimeInterface::ATOM),
-            $entity->timeRange->toDate->format(\DateTimeInterface::ATOM),
+            $entity->availablePersonnel,
+            $entity->clientsPerDay,
+            $entity->trackLengthInMeters,
+            $entity->timeRange->from->format(\DateTimeInterface::ATOM),
+            $entity->timeRange->to->format(\DateTimeInterface::ATOM),
         );
     }
 }

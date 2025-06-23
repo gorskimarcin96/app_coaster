@@ -14,11 +14,11 @@ final class RegisterCoasterControllerTest extends AbstractApiTestCase
     public function testRegister(): void
     {
         $payload = [
-            "personNumber" => 1,
-            "clientNumber" => 2,
-            "distanceLength" => 10,
-            "fromDate" => "2000-01-01",
-            "toDate" => "2000-01-02",
+            "availablePersonnel" => 1,
+            "clientsPerDay" => 2,
+            "trackLengthInMeters" => 10,
+            "from" => "2000-01-01",
+            "to" => "2000-01-02",
         ];
         $response = $this
             ->withHeaders(['Content-Type' => 'application/json'])

@@ -2,8 +2,8 @@
 
 namespace App\Coaster\Domain\Repository;
 
-use App\Coaster\Application\Query\GetWagonsHandler\GetWagonsQuery;
 use App\Coaster\Domain\Model\Wagon;
+use App\Coaster\Domain\Query\GetWagonsQuery;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\WagonId;
 

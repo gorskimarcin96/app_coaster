@@ -2,8 +2,8 @@
 
 namespace App\Coaster\Domain\Repository;
 
-use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersQuery;
 use App\Coaster\Domain\Model\Coaster;
+use App\Coaster\Domain\Query\GetCoastersQuery;
 use App\Coaster\Domain\ValueObject\CoasterId;
 
 interface CoasterRepository

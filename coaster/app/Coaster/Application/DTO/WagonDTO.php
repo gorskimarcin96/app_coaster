@@ -9,8 +9,8 @@ final readonly class WagonDTO
     private function __construct(
         public string $id,
         public string $coasterId,
-        public int $numberOfPlaces,
-        public float $speed,
+        public int $seats,
+        public float $speedInMetersPerSecond,
     ) {
     }
 
@@ -19,8 +19,8 @@ final readonly class WagonDTO
         return [
             'id' => $this->id,
             'coasterId' => $this->coasterId,
-            'numberOfPlaces' => $this->numberOfPlaces,
-            'speed' => $this->speed,
+            'seats' => $this->seats,
+            'speedInMetersPerSecond' => $this->speedInMetersPerSecond,
         ];
     }
 
@@ -29,8 +29,8 @@ final readonly class WagonDTO
         return new self(
             $entity->id,
             $entity->coasterId,
-            $entity->numberOfPlaces,
-            $entity->speed,
+            $entity->seats,
+            $entity->speedInMetersPerSecond,
         );
     }
 }

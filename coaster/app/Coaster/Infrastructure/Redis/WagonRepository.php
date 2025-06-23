@@ -2,8 +2,8 @@
 
 namespace App\Coaster\Infrastructure\Redis;
 
-use App\Coaster\Application\Query\GetWagonsHandler\GetWagonsQuery;
 use App\Coaster\Domain\Model\Wagon;
+use App\Coaster\Domain\Query\GetWagonsQuery;
 use App\Coaster\Domain\Repository\WagonRepository as WagonRepositoryInterface;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\WagonId;

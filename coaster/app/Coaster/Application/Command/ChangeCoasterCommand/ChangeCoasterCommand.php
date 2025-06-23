@@ -8,10 +8,10 @@ final readonly class ChangeCoasterCommand
 {
     public function __construct(
         public string $id,
-        public int $personNumber,
-        public int $clientNumber,
-        public string $fromDate,
-        public string $toDate,
+        public int $availablePersonnel,
+        public int $clientsPerDay,
+        public string $from,
+        public string $to,
     ) {
     }
 
@@ -19,10 +19,10 @@ final readonly class ChangeCoasterCommand
     {
         return new ChangeCoasterCommand(
             $data['id'] ?? throw new InvalidCommandArgumentException('id'),
-            $data['personNumber'] ?? throw new InvalidCommandArgumentException('personNumber'),
-            $data['clientNumber'] ?? throw new InvalidCommandArgumentException('clientNumber'),
-            $data['fromDate'] ?? throw new InvalidCommandArgumentException('fromDate'),
-            $data['toDate'] ?? throw new InvalidCommandArgumentException('toDate'),
+            $data['availablePersonnel'] ?? throw new InvalidCommandArgumentException('availablePersonnel'),
+            $data['clientsPerDay'] ?? throw new InvalidCommandArgumentException('clientsPerDay'),
+            $data['from'] ?? throw new InvalidCommandArgumentException('from'),
+            $data['to'] ?? throw new InvalidCommandArgumentException('to'),
         );
     }
 }

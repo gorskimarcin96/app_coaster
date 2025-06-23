@@ -22,16 +22,16 @@ final class GetCoasterControllerTest extends AbstractApiTestCase
         $responseData = json_decode($response->getJSON(), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertStructure(
-            ['id', 'personNumber', 'clientNumber', 'distanceLength', 'fromDate', 'toDate'],
+            ['id', 'availablePersonnel', 'clientsPerDay', 'trackLengthInMeters', 'from', 'to'],
             $responseData,
         );
 
         $this->assertSame($responseData['id'], $entity->id->getId()->toString());
-        $this->assertSame($responseData['personNumber'], $entity->personNumber);
-        $this->assertSame($responseData['clientNumber'], $entity->clientNumber);
-        $this->assertSame($responseData['distanceLength'], $entity->distanceLength);
-        $this->assertSame($responseData['fromDate'], $entity->timeRange->fromDate->format(DateTimeInterface::ATOM));
-        $this->assertSame($responseData['toDate'], $entity->timeRange->toDate->format(DateTimeInterface::ATOM));
+        $this->assertSame($responseData['availablePersonnel'], $entity->availablePersonnel);
+        $this->assertSame($responseData['clientsPerDay'], $entity->clientsPerDay);
+        $this->assertSame($responseData['trackLengthInMeters'], $entity->trackLengthInMeters);
+        $this->assertSame($responseData['from'], $entity->timeRange->from->format(DateTimeInterface::ATOM));
+        $this->assertSame($responseData['to'], $entity->timeRange->to->format(DateTimeInterface::ATOM));
     }
 
     /**

@@ -38,8 +38,8 @@ final class RegisterWagonHandlerTest extends TestCase
                 $this->callback(
                     fn(Wagon $entity): bool => $entity->id instanceof WagonId
                         && $entity->coasterId === $coaster->id
-                        && $entity->speed === 2.3
-                        && $entity->numberOfPlaces === 9,
+                        && $entity->speedInMetersPerSecond === 2.3
+                        && $entity->seats === 9,
                 ),
             );
 

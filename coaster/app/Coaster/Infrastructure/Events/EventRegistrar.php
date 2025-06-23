@@ -4,7 +4,7 @@ namespace App\Coaster\Infrastructure\Events;
 
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Service\Listener\ManagerListener;
-use App\Coaster\Domain\Service\Notifier;
+use App\Coaster\Domain\Service\Notifier\Notifier;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Infrastructure\Redis\WagonRepository;
 use CodeIgniter\Events\Events;

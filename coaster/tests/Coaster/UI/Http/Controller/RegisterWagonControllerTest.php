@@ -15,8 +15,8 @@ final class RegisterWagonControllerTest extends AbstractApiTestCase
     {
         $entity = $this->createCoaster();
         $payload = [
-            'numberOfPlaces' => 20,
-            'speed' => 2.6,
+            'seats' => 20,
+            'speedInMetersPerSecond' => 2.6,
             'coasterId' => $entity->id->getId()->toString(),
         ];
         $response = $this
@@ -55,8 +55,8 @@ final class RegisterWagonControllerTest extends AbstractApiTestCase
     public function testWhenCostarNotExists(): void
     {
         $payload = [
-            'numberOfPlaces' => 2,
-            'speed' => 2.6,
+            'seats' => 2,
+            'speedInMetersPerSecond' => 2.6,
             'coasterId' => 'a53be3c5-2435-40d1-8e6a-df04ebc1dfa2',
         ];
         $response = $this

@@ -24,11 +24,11 @@ final class CoasterDTOTest extends TestCase
         $this->assertSame(
             [
                 'id' => 'e5f2640e-d832-4673-967b-0f69aa04eb85',
-                'personNumber' => 1,
-                'clientNumber' => 2,
-                'distanceLength' => 3,
-                'fromDate' => '2000-01-01T00:00:00+00:00',
-                'toDate' => '2000-01-07T00:00:00+00:00',
+                'availablePersonnel' => 1,
+                'clientsPerDay' => 2,
+                'trackLengthInMeters' => 3,
+                'from' => '2000-01-01T00:00:00+00:00',
+                'to' => '2000-01-07T00:00:00+00:00',
             ],
             CoasterDTO::fromEntity($entity)->toArray(),
         );

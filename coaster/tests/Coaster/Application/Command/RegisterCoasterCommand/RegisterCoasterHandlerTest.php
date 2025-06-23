@@ -8,7 +8,6 @@ use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use CodeIgniter\Test\CIUnitTestCase;
-use DateTimeInterface;
 use Exception;
 
 final class RegisterCoasterHandlerTest extends CIUnitTestCase
@@ -24,16 +23,16 @@ final class RegisterCoasterHandlerTest extends CIUnitTestCase
             ->with(
                 $this->callback(
                     fn(Coaster $entity): bool => $entity->id instanceof CoasterId
-                        && $entity->personNumber === 3
-                        && $entity->clientNumber === 20
-                        && $entity->distanceLength === 100
-                        && $entity->timeRange->getStart()->format(DateTimeInterface::ATOM) === '2000-01-01T00:00:00+00:00'
-                        && $entity->timeRange->getEnd()->format(DateTimeInterface::ATOM) === '2000-01-07T00:00:00+00:00',
+                        && $entity->availablePersonnel === 3
+                        && $entity->clientsPerDay === 20
+                        && $entity->trackLengthInMeters === 100
+                        && $entity->timeRange->from->format('H:i') === '08:00'
+                        && $entity->timeRange->to->format('H:i') === '16:00',
                 ),
             );
 
         $handler = new RegisterCoasterHandler($repository);
-        $command = new RegisterCoasterCommand(3, 20, 100, '01-01-2000', '07-01-2000');
+        $command = new RegisterCoasterCommand(3, 20, 100, '08:00', '16:00');
 
         $handler($command);
     }

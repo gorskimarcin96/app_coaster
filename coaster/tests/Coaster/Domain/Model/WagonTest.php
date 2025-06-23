@@ -22,8 +22,8 @@ final class WagonTest extends TestCase
 
         $this->assertIsString($entity->id->getId()->toString());
         $this->assertSame($coasterId->getId()->toString(), $entity->coasterId->getId()->toString());
-        $this->assertSame(1, $entity->numberOfPlaces);
-        $this->assertSame(2.2, $entity->speed);
+        $this->assertSame(1, $entity->seats);
+        $this->assertSame(2.2, $entity->speedInMetersPerSecond);
     }
 
     public function testFromPersistence(): void
@@ -34,16 +34,16 @@ final class WagonTest extends TestCase
 
         $this->assertSame($wagonId->getId()->toString(), $entity->id->getId()->toString());
         $this->assertSame($coasterId->getId()->toString(), $entity->coasterId->getId()->toString());
-        $this->assertSame(1, $entity->numberOfPlaces);
-        $this->assertSame(2.2, $entity->speed);
+        $this->assertSame(1, $entity->seats);
+        $this->assertSame(2.2, $entity->speedInMetersPerSecond);
     }
 
     #[DataProvider('invalidArgumentExceptionDataProvider')]
-    public function testInvalidArgumentException(int $numberOfPlaces, float $speed): void
+    public function testInvalidArgumentException(int $seats, float $speedInMetersPerSecond): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        Wagon::register(CoasterId::generate(), $numberOfPlaces, $speed);
+        Wagon::register(CoasterId::generate(), $seats, $speedInMetersPerSecond);
     }
 
     public static function invalidArgumentExceptionDataProvider(): array
@@ -53,7 +53,7 @@ final class WagonTest extends TestCase
                 -3,
                 10.0,
             ],
-            'invalid speed' => [
+            'invalid speedInMetersPerSecond' => [
                 10,
                 -4.2,
             ],

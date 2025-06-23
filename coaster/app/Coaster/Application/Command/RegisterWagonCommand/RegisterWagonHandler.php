@@ -30,8 +30,8 @@ final readonly class RegisterWagonHandler
 
         $entity = Wagon::register(
             $coaster->id,
-            $command->numberOfPlaces,
-            $command->speed,
+            $command->seats,
+            $command->speedInMetersPerSecond,
         );
 
         $this->wagonRepository->save($entity);

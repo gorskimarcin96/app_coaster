@@ -20,11 +20,11 @@ final class GetWagonControllerTest extends AbstractApiTestCase
 
         $responseData = json_decode($response->getJSON(), true, 512, JSON_THROW_ON_ERROR);
 
-        $this->assertStructure(['id', 'coasterId', 'numberOfPlaces', 'speed'], $responseData);
+        $this->assertStructure(['id', 'coasterId', 'seats', 'speedInMetersPerSecond'], $responseData);
         $this->assertSame($responseData['id'], $entity->id->getId()->toString());
         $this->assertSame($responseData['coasterId'], $entity->coasterId->getId()->toString());
-        $this->assertSame($responseData['numberOfPlaces'], $entity->numberOfPlaces);
-        $this->assertSame($responseData['speed'], $entity->speed);
+        $this->assertSame($responseData['seats'], $entity->seats);
+        $this->assertSame($responseData['speedInMetersPerSecond'], $entity->speedInMetersPerSecond);
     }
 
     /**

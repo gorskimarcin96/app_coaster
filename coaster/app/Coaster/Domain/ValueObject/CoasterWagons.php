@@ -6,7 +6,6 @@ use App\Coaster\Domain\Exception\CoasterHasNotWagonsException;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\CoasterStatus;
 use App\Coaster\Domain\Model\Wagon;
-use DateTimeImmutable;
 use Exception;
 
 final readonly class CoasterWagons
@@ -22,7 +21,6 @@ final readonly class CoasterWagons
     }
 
     /**
-     * todo - i need unit test!
      * @throws Exception
      */
     public function countRideNumberOfClientInCoasterInDay(): int
@@ -32,32 +30,21 @@ final readonly class CoasterWagons
         foreach ($this->wagons as $wagon) {
             $freePlaces += $wagon->countRidesInTimeRange(
                     $this->coaster->timeRange,
-                    $wagon->calculateDurationWagonRideForDistance($this->coaster->calculateFullDistance()),
-                ) * ($wagon->numberOfPlaces - self::REQUIRED_PERSONNEL_TO_WAGONS);
+                    $wagon->calculateDurationWagonRideForDistance($this->coaster->trackLengthInMeters),
+                ) * ($wagon->seats - self::REQUIRED_PERSONNEL_TO_WAGONS);
         }
 
         return $freePlaces;
     }
 
-    /**
-     * todo - i need unit test!
-     * @throws Exception
-     */
-    public function averageRideNumberOfClientWagonInDay(): int
-    {
-        return count($this->wagons)
-            ? floor($this->countRideNumberOfClientInCoasterInDay() / count($this->wagons))
-            : throw new CoasterHasNotWagonsException($this->coaster->id);
-    }
-
-    /**
-     * todo - i need unit test!
-     */
     public function calculateNeedsPersonnelInCasterWithWagonsOfNumber(int $wagonsOfNumber): int
     {
         return $wagonsOfNumber * self::REQUIRED_PERSONNEL_TO_WAGONS + self::REQUIRED_PERSONNEL_TO_COASTER;
     }
 
+    /**
+     * @throws Exception
+     */
     public function status(): CoasterStatus
     {
         try {
@@ -75,66 +62,111 @@ final readonly class CoasterWagons
         }
     }
 
-    private function isMissingClients(): bool
-    {
-        return !$this->coaster->clientNumber;
-}
-
-    private function isSmallNumberOfClients(): bool
-    {
-        return count($this->wagons) > 1
-            && $this->coaster->clientNumber <= $this->countRideNumberOfClientInCoasterInDay() / 2;
-    }
-
-    private function isExcessPersonnel(): bool
-    {
-        return $this->coaster->personNumber > $this->calculateNeedsPersonnel();
-    }
-
-    private function isMissingWagonsAndPersonnel(): bool
-    {
-        return count($this->wagons) && $this->calculateMissingWagons() && $this->calculateMissingPersonnel();
-    }
-
-    public function isMissingWagons(): bool
-    {
-        return count($this->wagons) && $this->calculateMissingWagons() > 0;
-    }
-
-    private function isMissingPersonnel(): bool
-    {
-        return $this->calculateMissingPersonnel() > 0;
-    }
-
+    /**
+     * @throws Exception
+     */
     public function calculateMissingWagons(): int
     {
-        return ceil($this->coaster->clientNumber / $this->averageRideNumberOfClientWagonInDay()) - count($this->wagons);
+        return ceil($this->coaster->clientsPerDay / $this->averageRideNumberOfClientWagonInDay()) - count($this->wagons);
     }
 
+    /**
+     * @throws Exception
+     */
     public function calculateMissingPersonnel(): int
     {
-        $numberOfNeedsPersonnel = $this->calculateNeedsPersonnelInCasterWithWagonsOfNumber($this->calculateNeedsWagons());
+        $numberOfNeedsPersonnel = $this->calculateNeedsPersonnelInCasterWithWagonsOfNumber(
+            $this->calculateNeedsWagons(),
+        );
 
-        return $numberOfNeedsPersonnel - $this->coaster->personNumber;
+        return $numberOfNeedsPersonnel - $this->coaster->availablePersonnel;
     }
 
+    /**
+     * @throws Exception
+     */
     public function calculateExcessWagons(): int
     {
         return -1 * $this->calculateMissingWagons();
     }
 
+    /**
+     * @throws Exception
+     */
     public function calculateExcessPersonnel(): int
     {
         return -1 * $this->calculateMissingPersonnel();
     }
 
+    /**
+     * @throws Exception
+     */
     public function calculateNeedsWagons(): int
     {
         return count($this->wagons) + $this->calculateMissingWagons();
     }
 
+    /**
+     * @throws Exception
+     */
     public function calculateNeedsPersonnel(): int
     {
         return $this->calculateNeedsPersonnelInCasterWithWagonsOfNumber($this->calculateNeedsWagons());
+    }
+
+    private function isMissingClients(): bool
+    {
+        return !$this->coaster->clientsPerDay;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isSmallNumberOfClients(): bool
+    {
+        return count($this->wagons) > 1
+            && $this->coaster->clientsPerDay <= $this->countRideNumberOfClientInCoasterInDay() / 2;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isExcessPersonnel(): bool
+    {
+        return $this->coaster->availablePersonnel > $this->calculateNeedsPersonnel();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isMissingWagonsAndPersonnel(): bool
+    {
+        return count($this->wagons) && $this->calculateMissingWagons() && $this->calculateMissingPersonnel();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isMissingWagons(): bool
+    {
+        return count($this->wagons) && $this->calculateMissingWagons() > 0;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isMissingPersonnel(): bool
+    {
+        return $this->calculateMissingPersonnel() > 0;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function averageRideNumberOfClientWagonInDay(): int
+    {
+        return count($this->wagons)
+            ? floor($this->countRideNumberOfClientInCoasterInDay() / count($this->wagons))
+            : throw new CoasterHasNotWagonsException($this->coaster->id);
     }
 }

@@ -15,10 +15,10 @@ final class ChangeCoasterControllerTest extends AbstractApiTestCase
     {
         $entity = $this->createCoaster();
         $payload = [
-            "personNumber" => 2,
-            "clientNumber" => 3,
-            "fromDate" => "2000-01-02",
-            "toDate" => "2000-01-03",
+            "availablePersonnel" => 2,
+            "clientsPerDay" => 3,
+            "from" => "2000-01-02",
+            "to" => "2000-01-03",
         ];
         $response = $this
             ->withHeaders(['Content-Type' => 'application/json'])
@@ -29,10 +29,10 @@ final class ChangeCoasterControllerTest extends AbstractApiTestCase
 
         $entity = $this->getCoaster($entity->id);
 
-        $this->assertSame($payload['personNumber'], $entity->personNumber);
-        $this->assertSame($payload['clientNumber'], $entity->clientNumber);
-        $this->assertSame($payload['fromDate'], $entity->timeRange->fromDate->format('Y-m-d'));
-        $this->assertSame($payload['toDate'], $entity->timeRange->toDate->format('Y-m-d'));
+        $this->assertSame($payload['availablePersonnel'], $entity->availablePersonnel);
+        $this->assertSame($payload['clientsPerDay'], $entity->clientsPerDay);
+        $this->assertSame($payload['from'], $entity->timeRange->from->format('Y-m-d'));
+        $this->assertSame($payload['to'], $entity->timeRange->to->format('Y-m-d'));
     }
 
     /**
@@ -59,10 +59,10 @@ final class ChangeCoasterControllerTest extends AbstractApiTestCase
     public function testWhenCostarNotExists(): void
     {
         $payload = [
-            "personNumber" => 2,
-            "clientNumber" => 3,
-            "fromDate" => "2000-01-02",
-            "toDate" => "2000-01-03",
+            "availablePersonnel" => 2,
+            "clientsPerDay" => 3,
+            "from" => "2000-01-02",
+            "to" => "2000-01-03",
         ];
         $response = $this
             ->withHeaders(['Content-Type' => 'application/json'])

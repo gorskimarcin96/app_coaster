@@ -3,10 +3,8 @@
 namespace App\Coaster\Infrastructure\AsyncRedis;
 
 use App\Coaster\Domain\AsyncRepository\WagonRepository as WagonRepositoryInterface;
-use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\Query\GetWagonsQuery;
-use App\Coaster\Infrastructure\Mapper\CoasterMapper;
 use App\Coaster\Infrastructure\Mapper\WagonMapper;
 use Clue\React\Redis\Client;
 use Exception;

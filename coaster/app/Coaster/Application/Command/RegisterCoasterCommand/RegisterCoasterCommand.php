@@ -7,22 +7,22 @@ use App\Coaster\Application\Command\Exception\InvalidCommandArgumentException;
 final readonly class RegisterCoasterCommand
 {
     public function __construct(
-        public int $personNumber,
-        public int $clientNumber,
-        public int $distanceLength,
-        public string $fromDate,
-        public string $toDate,
+        public int $availablePersonnel,
+        public int $clientsPerDay,
+        public int $trackLengthInMeters,
+        public string $from,
+        public string $to,
     ) {
     }
 
     public static function fromArray(array $data): RegisterCoasterCommand
     {
         return new RegisterCoasterCommand(
-            $data['personNumber'] ?? throw new InvalidCommandArgumentException('personNumber'),
-            $data['clientNumber'] ?? throw new InvalidCommandArgumentException('clientNumber'),
-            $data['distanceLength'] ?? throw new InvalidCommandArgumentException('distanceLength'),
-            $data['fromDate'] ?? throw new InvalidCommandArgumentException('fromDate'),
-            $data['toDate'] ?? throw new InvalidCommandArgumentException('toDate'),
+            $data['availablePersonnel'] ?? throw new InvalidCommandArgumentException('availablePersonnel'),
+            $data['clientsPerDay'] ?? throw new InvalidCommandArgumentException('clientsPerDay'),
+            $data['trackLengthInMeters'] ?? throw new InvalidCommandArgumentException('trackLengthInMeters'),
+            $data['from'] ?? throw new InvalidCommandArgumentException('from'),
+            $data['to'] ?? throw new InvalidCommandArgumentException('to'),
         );
     }
 }

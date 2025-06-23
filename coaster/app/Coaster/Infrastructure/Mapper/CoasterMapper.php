@@ -21,11 +21,11 @@ final readonly class CoasterMapper
         return json_encode(
             [
                 'id' => $entity->id->getId()->toString(),
-                'personNumber' => $entity->personNumber,
-                'clientNumber' => $entity->clientNumber,
-                'distanceLength' => $entity->distanceLength,
-                'fromDate' => $entity->timeRange->fromDate->format(DateTimeInterface::ATOM),
-                'toDate' => $entity->timeRange->toDate->format(DateTimeInterface::ATOM),
+                'availablePersonnel' => $entity->availablePersonnel,
+                'clientsPerDay' => $entity->clientsPerDay,
+                'trackLengthInMeters' => $entity->trackLengthInMeters,
+                'from' => $entity->timeRange->from->format(DateTimeInterface::ATOM),
+                'to' => $entity->timeRange->to->format(DateTimeInterface::ATOM),
             ],
             JSON_THROW_ON_ERROR,
         );
@@ -40,10 +40,10 @@ final readonly class CoasterMapper
 
         return Coaster::fromPersistence(
             new CoasterId(Uuid::fromString($data['id'])),
-            $data['personNumber'],
-            $data['clientNumber'],
-            $data['distanceLength'],
-            new TimeRange(new DateTimeImmutable($data['fromDate']), new DateTimeImmutable($data['toDate'])),
+            $data['availablePersonnel'],
+            $data['clientsPerDay'],
+            $data['trackLengthInMeters'],
+            new TimeRange(new DateTimeImmutable($data['from']), new DateTimeImmutable($data['to'])),
         );
     }
 }

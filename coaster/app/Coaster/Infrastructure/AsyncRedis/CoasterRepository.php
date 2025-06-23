@@ -10,7 +10,7 @@ use Exception;
 use React\Promise\PromiseInterface;
 use function React\Promise\all;
 
-class CoasterRepository implements CoasterRepositoryInterface
+final readonly class CoasterRepository implements CoasterRepositoryInterface
 {
     /**
      * @return PromiseInterface<Coaster[]>

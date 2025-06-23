@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Coaster\Domain\Service;
+namespace App\Coaster\Domain\Service\Notifier;
 
 interface Notifier
 {

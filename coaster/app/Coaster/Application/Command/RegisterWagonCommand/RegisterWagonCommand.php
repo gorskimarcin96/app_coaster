@@ -7,8 +7,8 @@ use App\Coaster\Application\Command\Exception\InvalidCommandArgumentException;
 final readonly class RegisterWagonCommand
 {
     public function __construct(
-        public int $numberOfPlaces,
-        public float $speed,
+        public int $seats,
+        public float $speedInMetersPerSecond,
         public string $coasterId,
     ) {
     }
@@ -16,8 +16,8 @@ final readonly class RegisterWagonCommand
     public static function fromArray(array $data): RegisterWagonCommand
     {
         return new RegisterWagonCommand(
-            $data['numberOfPlaces'] ?? throw new InvalidCommandArgumentException('numberOfPlaces'),
-            $data['speed'] ?? throw new InvalidCommandArgumentException('speed'),
+            $data['seats'] ?? throw new InvalidCommandArgumentException('seats'),
+            $data['speedInMetersPerSecond'] ?? throw new InvalidCommandArgumentException('speedInMetersPerSecond'),
             $data['coasterId'] ?? throw new InvalidCommandArgumentException('coasterId'),
         );
     }

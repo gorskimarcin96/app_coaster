@@ -5,6 +5,7 @@ namespace Coaster\Application\Query\GetCoastersHandler;
 use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersHandler;
 use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersQuery;
 use App\Coaster\Domain\Model\Coaster;
+use App\Coaster\Domain\Query\GetCoastersQuery as DomainQuery;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use CodeIgniter\Test\CIUnitTestCase;
@@ -22,7 +23,7 @@ final class GetCoastersHandlerTest extends CIUnitTestCase
         $repository = $this->createMock(CoasterRepository::class);
         $repository->expects($this->once())
             ->method('getByQuery')
-            ->with(new GetCoastersQuery())
+            ->with(new DomainQuery())
             ->willReturn(
                 [
                     Coaster::register(1, 2, 10, new TimeRange(new DateTimeImmutable(), new DateTimeImmutable())),

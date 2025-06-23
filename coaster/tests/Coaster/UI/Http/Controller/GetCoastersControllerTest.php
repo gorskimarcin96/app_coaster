@@ -14,7 +14,7 @@ final class GetCoastersControllerTest extends AbstractApiTestCase
      */
     public function testGet(): void
     {
-        array_map(fn(int $personNumber): Coaster => $this->createCoaster($personNumber), range(1, 10));
+        array_map(fn(int $availablePersonnel): Coaster => $this->createCoaster($availablePersonnel), range(1, 10));
 
         $response = $this->get('api/coasters');
 
@@ -26,7 +26,7 @@ final class GetCoastersControllerTest extends AbstractApiTestCase
 
         array_map(
             fn(array $row) => $this->assertStructure(
-                ['id', 'personNumber', 'clientNumber', 'distanceLength', 'fromDate', 'toDate'],
+                ['id', 'availablePersonnel', 'clientsPerDay', 'trackLengthInMeters', 'from', 'to'],
                 $row,
             ),
             $responseData,

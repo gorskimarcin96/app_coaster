@@ -21,10 +21,10 @@ final readonly class RegisterCoasterHandler
     public function __invoke(RegisterCoasterCommand $command): CoasterId
     {
         $entity = Coaster::register(
-            $command->personNumber,
-            $command->clientNumber,
-            $command->distanceLength,
-            new TimeRange(new DateTimeImmutable($command->fromDate), new DateTimeImmutable($command->toDate)),
+            $command->availablePersonnel,
+            $command->clientsPerDay,
+            $command->trackLengthInMeters,
+            new TimeRange(new DateTimeImmutable($command->from), new DateTimeImmutable($command->to)),
         );
 
         $this->repository->save($entity);

@@ -37,18 +37,18 @@ abstract class AbstractApiTestCase extends CIUnitTestCase
      * @throws Exception
      */
     protected function createCoaster(
-        int $personNumber = 11,
-        int $clientNumber = 540,
-        int $distanceLength = 2400,
+        int $availablePersonnel = 11,
+        int $clientsPerDay = 540,
+        int $trackLengthInMeters = 2400,
         string $from = '08:00',
         string $to = '16:00',
     ): Coaster {
         /** @var CoasterRepository $repository */
         $repository = service('coasterRepository');
         $entity = Coaster::register(
-            $personNumber,
-            $clientNumber,
-            $distanceLength,
+            $availablePersonnel,
+            $clientsPerDay,
+            $trackLengthInMeters,
             new TimeRange(new DateTimeImmutable($from), new DateTimeImmutable($to)),
         );
         $repository->save($entity);
@@ -70,12 +70,12 @@ abstract class AbstractApiTestCase extends CIUnitTestCase
      */
     protected function createWagon(
         CoasterId $coasterId,
-        int $numberOfPlaces = 20,
-        float $speed = 1.1,
+        int $seats = 20,
+        float $speedInMetersPerSecond = 1.1,
     ): Wagon {
         /** @var WagonRepository $repository */
         $repository = service('wagonRepository');
-        $entity = Wagon::register($coasterId, $numberOfPlaces, $speed);
+        $entity = Wagon::register($coasterId, $seats, $speedInMetersPerSecond);
 
         $repository->save($entity);
 

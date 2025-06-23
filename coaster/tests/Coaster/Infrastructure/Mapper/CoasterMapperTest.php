@@ -20,16 +20,16 @@ final class CoasterMapperTest extends TestCase
      */
     public function testToDomain(): void
     {
-        $json = '{"id":"b22f1078-e38a-43bf-a3e6-391d3dfc8a77","personNumber":1,"clientNumber":2,"distanceLength":3,"fromDate":"2020-01-01T00:00:00+00:00","toDate":"2020-01-02T00:00:00+00:00"}';
+        $json = '{"id":"b22f1078-e38a-43bf-a3e6-391d3dfc8a77","availablePersonnel":1,"clientsPerDay":2,"trackLengthInMeters":3,"from":"2020-01-01T00:00:00+00:00","to":"2020-01-02T00:00:00+00:00"}';
 
         $entity = CoasterMapper::toDomain($json);
 
         $this->assertSame('b22f1078-e38a-43bf-a3e6-391d3dfc8a77', $entity->id->getId()->toString());
-        $this->assertSame(1, $entity->personNumber);
-        $this->assertSame(2, $entity->clientNumber);
-        $this->assertSame(3, $entity->distanceLength);
-        $this->assertSame("2020-01-01T00:00:00+00:00", $entity->timeRange->fromDate->format(DateTimeInterface::ATOM));
-        $this->assertSame("2020-01-02T00:00:00+00:00", $entity->timeRange->toDate->format(DateTimeInterface::ATOM));
+        $this->assertSame(1, $entity->availablePersonnel);
+        $this->assertSame(2, $entity->clientsPerDay);
+        $this->assertSame(3, $entity->trackLengthInMeters);
+        $this->assertSame("2020-01-01T00:00:00+00:00", $entity->timeRange->from->format(DateTimeInterface::ATOM));
+        $this->assertSame("2020-01-02T00:00:00+00:00", $entity->timeRange->to->format(DateTimeInterface::ATOM));
     }
 
     /**
@@ -46,7 +46,7 @@ final class CoasterMapperTest extends TestCase
         );
 
         $this->assertSame(
-            '{"id":"b22f1078-e38a-43bf-a3e6-391d3dfc8a77","personNumber":1,"clientNumber":2,"distanceLength":3,"fromDate":"2020-01-01T00:00:00+00:00","toDate":"2020-01-02T00:00:00+00:00"}',
+            '{"id":"b22f1078-e38a-43bf-a3e6-391d3dfc8a77","availablePersonnel":1,"clientsPerDay":2,"trackLengthInMeters":3,"from":"2020-01-01T00:00:00+00:00","to":"2020-01-02T00:00:00+00:00"}',
             CoasterMapper::toJSON($entity),
         );
     }

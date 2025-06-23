@@ -14,25 +14,6 @@ use CodeIgniter\CLI\CLI;
 use DateTimeImmutable;
 use React\EventLoop\Loop;
 
-/**
- * Zarządzanie kolejkami i wagonami:
- * 1. system umożliwia rejestrację i edycję kolejek górskich oraz rejestrację i usuwanie wagonów przez API
- * 2. każda kolejka górska działa w określonych godzinach (od, do)
- * 3. każdy wagon musi wrócić przed końcem czasu działania kolejki górskiej
- * 4. wagony potrzebują 5 minut przerwy, zanim ponownie będą mogły działać po skończonej trasie
- *
- * Zarządzanie personelem (p):
- * 1. do obsługi każdej kolejki górskiej wymagany jest 1 p (np. sprzedawca biletów - nie jest to istotne)
- * 2. do obsługi każdego wagonu dodatkowo wymagane są 2 p (np. maszynista i mechanik - nie jest to istotne)
- * 3. jeśli w systemie brakuje odpowiedniej liczby p do obsługi kolejki lub wagonu, system informuje o tym oraz wylicza brakującą liczbę p
- * 4. jeśli w systemie jest za dużo p, system informuje o tym oraz wylicza nadmiarową liczbę p
- *
- * Zarządzanie klientami:
- * 1. system monitoruje liczbę klientów, których kolejka górska powinna obsłużyć w ciągu dnia
- * 2. jeśli kolejka nie będzie w stanie obsłużyć wszystkich klientów w ciągu dnia, system informuje o tym i wylicza, ile brakuje wagonów oraz personelu
- * 3. jeśli kolejka górska ma więcej mocy przerobowych niż wymagane, tj. obsłuży ponad dwukrotnie więcej klientów niż zaplanowano, system informuje o nadmiarowej liczbie wagonów i personelu
- *
- */
 final class CoasterMonitor extends BaseCommand
 {
     protected $group = 'App';

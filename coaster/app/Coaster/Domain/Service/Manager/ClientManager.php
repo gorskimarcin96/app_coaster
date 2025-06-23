@@ -2,7 +2,7 @@
 
 namespace App\Coaster\Domain\Service\Manager;
 
-use App\Coaster\Domain\Service\Notifier;
+use App\Coaster\Domain\Service\Notifier\Notifier;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
 
 final readonly class ClientManager implements ManagerInterface
@@ -36,7 +36,7 @@ final readonly class ClientManager implements ManagerInterface
             );
         }
 
-        if ($coasterWagons->coaster->clientNumber <= $coasterWagons->countRideNumberOfClientInCoasterInDay() / 2) {
+        if ($coasterWagons->coaster->clientsPerDay <= $coasterWagons->countRideNumberOfClientInCoasterInDay() / 2) {
             if ($coasterWagons->calculateExcessWagons() > 0) {
                 $notifier->notify(
                     sprintf(

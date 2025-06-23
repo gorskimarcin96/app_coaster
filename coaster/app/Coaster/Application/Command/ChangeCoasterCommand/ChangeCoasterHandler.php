@@ -24,9 +24,9 @@ final readonly class ChangeCoasterHandler
             ?? throw new EntityNotFoundException('coaster');
 
         $entity = $entity->withUpdatedData(
-            $command->personNumber,
-            $command->clientNumber,
-            new TimeRange(new \DateTimeImmutable($command->fromDate), new \DateTimeImmutable($command->toDate)),
+            $command->availablePersonnel,
+            $command->clientsPerDay,
+            new TimeRange(new \DateTimeImmutable($command->from), new \DateTimeImmutable($command->to)),
         );
 
         $this->repository->update($entity);

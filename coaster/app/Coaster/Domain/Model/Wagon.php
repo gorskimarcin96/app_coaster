@@ -15,14 +15,14 @@ class Wagon
     private function __construct(
         public readonly WagonId $id,
         public readonly CoasterId $coasterId,
-        public readonly int $numberOfPlaces,
-        public readonly float $speed,
+        public readonly int $seats,
+        public readonly float $speedInMetersPerSecond,
     ) {
-        if ($this->speed <= 0) {
-            throw new InvalidArgumentException("Speed must be greater than 0 m/s.");
+        if ($this->speedInMetersPerSecond <= 0) {
+            throw new InvalidArgumentException("speedInMetersPerSecond must be greater than 0 m/s.");
         }
 
-        if ($this->numberOfPlaces < 0) {
+        if ($this->seats < 0) {
             throw new InvalidArgumentException(
                 sprintf(
                     'The number of places must be greater than or equal to %s',
@@ -34,28 +34,28 @@ class Wagon
 
     public static function register(
         CoasterId $coasterId,
-        int $numberOfPlaces,
-        float $speed,
+        int $seats,
+        float $speedInMetersPerSecond,
     ): Wagon {
         return new Wagon(
             WagonId::generate(),
             $coasterId,
-            $numberOfPlaces,
-            $speed,
+            $seats,
+            $speedInMetersPerSecond,
         );
     }
 
     public static function fromPersistence(
         WagonId $id,
         CoasterId $coasterId,
-        int $numberOfPlaces,
-        float $speed,
+        int $seats,
+        float $speedInMetersPerSecond,
     ): Wagon {
         return new Wagon(
             $id,
             $coasterId,
-            $numberOfPlaces,
-            $speed,
+            $seats,
+            $speedInMetersPerSecond,
         );
     }
 
@@ -64,9 +64,9 @@ class Wagon
      */
     public function calculateDurationWagonRideForDistance(int $distance): DateInterval
     {
-        return $this->speed > 0
-            ? new DateInterval('PT' . ceil($distance / $this->speed) . 'S')
-            : throw new LogicException("Speed must be greater than zero.");
+        return $this->speedInMetersPerSecond > 0
+            ? new DateInterval('PT' . ceil($distance / $this->speedInMetersPerSecond) . 'S')
+            : throw new LogicException("speedInMetersPerSecond must be greater than zero.");
     }
 
     public function getBreakDuration(): DateInterval
@@ -80,9 +80,9 @@ class Wagon
     public function countRidesInTimeRange(TimeRange $timeRange, DateInterval $rideDuration): int
     {
         $count = 0;
-        $current = $timeRange->fromDate;
+        $current = $timeRange->from;
 
-        while ($current <= $timeRange->toDate) {
+        while ($current <= $timeRange->to) {
             $current = $current->add($rideDuration)->add($this->getBreakDuration());
             $count++;
         }

@@ -4,6 +4,7 @@ namespace App\Coaster\Application\Query\GetCoastersHandler;
 
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Repository\CoasterRepository;
+use App\Coaster\Domain\Query\GetCoastersQuery as DomainQuery;
 
 final readonly class GetCoastersHandler
 {
@@ -16,6 +17,6 @@ final readonly class GetCoastersHandler
      */
     public function __invoke(GetCoastersQuery $query): array
     {
-        return $this->repository->getByQuery($query);
+        return $this->repository->getByQuery(new DomainQuery());
     }
 }

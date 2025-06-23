@@ -38,8 +38,8 @@ final readonly class LogCoasterMonitor
         return sprintf(
             '%s. Godziny działania: %s - %s',
             $position,
-            $timeRange->fromDate->format('H:i'),
-            $timeRange->fromDate->format('H:i'),
+            $timeRange->from->format('H:i'),
+            $timeRange->from->format('H:i'),
         );
     }
 
@@ -60,17 +60,17 @@ final readonly class LogCoasterMonitor
             return sprintf(
                 '%s. Dostępny personel: %s/%s',
                 $position,
-                $coasterWagons->coaster->personNumber,
+                $coasterWagons->coaster->availablePersonnel,
                 $coasterWagons->calculateNeedsPersonnel(),
             );
         } catch (CoasterHasNotWagonsException) {
-            return sprintf('%s. Dostępny personel: %s', $position, $coasterWagons->coaster->personNumber);
+            return sprintf('%s. Dostępny personel: %s', $position, $coasterWagons->coaster->availablePersonnel);
         }
     }
 
     private function numberOfClientsInDay(int $position, Coaster $coaster): string
     {
-        return sprintf('%s. Klienci dziennie: %s', $position, $coaster->clientNumber);
+        return sprintf('%s. Klienci dziennie: %s', $position, $coaster->clientsPerDay);
     }
 
     private function status(int $position, CoasterWagons $coasterWagons): string

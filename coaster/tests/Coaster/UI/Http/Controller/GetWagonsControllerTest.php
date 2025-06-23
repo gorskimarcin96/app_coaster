@@ -14,7 +14,7 @@ final class GetWagonsControllerTest extends AbstractApiTestCase
     public function testGet(): void
     {
         $coaster = $this->createCoaster();
-        array_map(fn(int $numberOfPlaces) => $this->createWagon($coaster->id, $numberOfPlaces), range(1, 10));
+        array_map(fn(int $seats) => $this->createWagon($coaster->id, $seats), range(1, 10));
         $response = $this->get(sprintf('api/coasters/%s/wagon', $coaster->id));
 
         $response->assertStatus(200);
@@ -22,7 +22,7 @@ final class GetWagonsControllerTest extends AbstractApiTestCase
         $responseData = json_decode($response->getJSON(), true, 512, JSON_THROW_ON_ERROR);
 
         array_map(
-            fn(array $row) => $this->assertStructure(['id', 'coasterId', 'numberOfPlaces', 'speed'], $row),
+            fn(array $row) => $this->assertStructure(['id', 'coasterId', 'seats', 'speedInMetersPerSecond'], $row),
             $responseData,
         );
     }

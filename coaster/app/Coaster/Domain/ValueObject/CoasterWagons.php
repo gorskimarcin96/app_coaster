@@ -143,7 +143,7 @@ final readonly class CoasterWagons
      */
     private function isMissingWagonsAndPersonnel(): bool
     {
-        return count($this->wagons) && $this->calculateMissingWagons() && $this->calculateMissingPersonnel();
+        return count($this->wagons) && $this->calculateMissingWagons() > 0 && $this->calculateMissingPersonnel() > 0;
     }
 
     /**

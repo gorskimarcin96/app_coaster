@@ -41,7 +41,7 @@ final readonly class LogCoasterMonitor
             '%s. Godziny działania: %s - %s',
             $position,
             $timeRange->from->format('H:i'),
-            $timeRange->from->format('H:i'),
+            $timeRange->to->format('H:i'),
         );
     }
 

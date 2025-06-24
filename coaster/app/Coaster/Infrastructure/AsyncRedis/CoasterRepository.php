@@ -27,7 +27,7 @@ final readonly class CoasterRepository implements CoasterRepositoryInterface
             fn(array $keys) => all(
                 array_map(
                     static fn(string $key) => $redis->get($key)->then(fn(string $json): Coaster => CoasterMapper::toDomain($json)),
-                    array_filter($keys, static fn(string $key): string => preg_match('/^coaster:[0-9a-f\-]{36}$/i', $key)),
+                    array_filter($keys, static fn(string $key): false|int => preg_match('/^coaster:[0-9a-f\-]{36}$/i', $key)),
                 ),
             ),
         );

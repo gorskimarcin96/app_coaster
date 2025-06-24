@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Coaster\Application\Command\RegisterWagonCommand;
 
-use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonHandler;
 use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonCommand;
+use App\Coaster\Application\Command\RegisterWagonCommand\RegisterWagonHandler;
+use App\Coaster\Application\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
 use App\Coaster\Domain\ValueObject\TimeRange;
 use App\Coaster\Domain\ValueObject\WagonId;
-use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;

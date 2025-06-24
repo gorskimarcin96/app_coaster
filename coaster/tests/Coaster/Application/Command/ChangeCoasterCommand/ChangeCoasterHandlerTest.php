@@ -6,10 +6,10 @@ namespace Coaster\Application\Command\ChangeCoasterCommand;
 
 use App\Coaster\Application\Command\ChangeCoasterCommand\ChangeCoasterCommand;
 use App\Coaster\Application\Command\ChangeCoasterCommand\ChangeCoasterHandler;
+use App\Coaster\Application\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\TimeRange;
-use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;

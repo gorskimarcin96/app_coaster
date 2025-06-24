@@ -6,8 +6,8 @@ namespace App\Coaster\UI\Http\Controller;
 
 use App\Coaster\Application\Command\ChangeCoasterCommand\ChangeCoasterCommand;
 use App\Coaster\Application\Command\ChangeCoasterCommand\ChangeCoasterHandler;
-use App\Coaster\Application\Command\Exception\EntityNotFoundException;
-use App\Coaster\Application\Command\Exception\InvalidCommandArgumentException;
+use App\Coaster\Application\Exception\EntityNotFoundException;
+use App\Coaster\Application\Exception\InvalidCommandArgumentException;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Infrastructure\Events\EventRegistrar;

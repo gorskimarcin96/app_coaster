@@ -6,13 +6,13 @@ namespace Coaster\Application\Command\DeleteWagonCommand;
 
 use App\Coaster\Application\Command\DeleteWagonCommand\DeleteWagonCommand;
 use App\Coaster\Application\Command\DeleteWagonCommand\DeleteWagonHandler;
+use App\Coaster\Application\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\TimeRange;
-use App\Coaster\Application\Command\Exception\EntityNotFoundException;
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Coaster\Application\Command\DeleteWagonCommand;
 
-use App\Coaster\Application\Command\Exception\EntityNotFoundException;
+use App\Coaster\Application\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\Repository\WagonRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;

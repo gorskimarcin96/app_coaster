@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Coaster\Application\Command\Exception;
+namespace App\Coaster\Application\Exception;
 
 use InvalidArgumentException;
 

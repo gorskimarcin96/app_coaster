@@ -6,7 +6,7 @@ namespace App\Coaster\UI\Http\Controller;
 
 use App\Coaster\Application\Command\DeleteWagonCommand\DeleteWagonCommand;
 use App\Coaster\Application\Command\DeleteWagonCommand\DeleteWagonHandler;
-use App\Coaster\Application\Command\Exception\EntityNotFoundException;
+use App\Coaster\Application\Exception\EntityNotFoundException;
 use App\Coaster\Domain\Repository\CoasterRepository;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Infrastructure\Events\EventRegistrar;

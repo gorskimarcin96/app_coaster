@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Coaster\Domain\Model;
 
+use App\Coaster\Application\Exception\InvalidCommandArgumentException;
 use Exception;
 use App\Coaster\Domain\ValueObject\CoasterId;
 use App\Coaster\Domain\ValueObject\CoasterWagons;
@@ -22,11 +23,11 @@ class Wagon
         public readonly float $speedInMetersPerSecond,
     ) {
         if ($this->speedInMetersPerSecond <= 0) {
-            throw new InvalidArgumentException("speedInMetersPerSecond must be greater than 0 m/s.");
+            throw new InvalidCommandArgumentException("speedInMetersPerSecond must be greater than 0 m/s.");
         }
 
         if ($this->seats < 0) {
-            throw new InvalidArgumentException(
+            throw new InvalidCommandArgumentException(
                 sprintf(
                     'The number of places must be greater than or equal to %s',
                     CoasterWagons::REQUIRED_PERSONNEL_TO_WAGONS,

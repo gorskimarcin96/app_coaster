@@ -15,14 +15,10 @@ final readonly class AccessDevelopmentByIPFilter implements FilterInterface
 
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (
-            env('CI_ENVIRONMENT') === 'development'
-            && !in_array($request->getIPAddress(), self::ALLOWED_IPS, true)
-        ) {
-            log_message(
-                'info',
-                sprintf('User with IP address %s tries to connect to the application.', $request->getIPAddress()),
-            );
+        $myIp = $request->getIPAddress();
+
+        if (getenv('CI_ENVIRONMENT') === 'development' && !in_array($myIp, self::ALLOWED_IPS, true)) {
+            log_message('info', sprintf('User with IP address %s tries to connect to the application.', $myIp));
 
             /** @var Response $response */
             $response = service('response');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Coaster\Application\Command\ChangeCoasterCommand;
 
-use App\Coaster\Application\Command\Exception\InvalidCommandArgumentException;
+use App\Coaster\Application\Exception\InvalidCommandArgumentException;
 
 final readonly class ChangeCoasterCommand
 {

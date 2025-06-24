@@ -33,7 +33,7 @@ final class Services extends BaseService
     {
         return $getShared
             ? self::getSharedInstance('asyncRedis')
-            : (new Factory())->createLazyClient($_ENV['REDIS_HOST'] . ':' . $_ENV['REDIS_PORT']);
+            : (new Factory())->createLazyClient(getenv('REDIS_HOST') . ':' . getenv('REDIS_PORT'));
 
     }
 
@@ -58,8 +58,7 @@ final class Services extends BaseService
         }
 
         $redis = new Redis();
-        $redis->connect($_ENV['REDIS_HOST'], (int)$_ENV['REDIS_PORT']);
-        $redis->select((int)$_ENV['REDIS_DB']);
+        $redis->connect(getenv('REDIS_HOST'), (int)getenv('REDIS_PORT'));
 
         return $redis;
     }

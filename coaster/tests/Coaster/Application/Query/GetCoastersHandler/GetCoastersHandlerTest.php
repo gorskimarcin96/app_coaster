@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Coaster\Application\Query\GetCoastersHandler;
 
 use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersHandler;
-use App\Coaster\Application\Query\GetCoastersHandler\GetCoastersQuery;
 use App\Coaster\Domain\Model\Coaster;
 use App\Coaster\Domain\Query\GetCoastersQuery as DomainQuery;
 use App\Coaster\Domain\Repository\CoasterRepository;
@@ -35,7 +34,7 @@ final class GetCoastersHandlerTest extends CIUnitTestCase
             );
 
         $handler = new GetCoastersHandler($repository);
-        $response = $handler(new GetCoastersQuery());
+        $response = $handler();
 
         $this->assertCount(3, $response);
     }

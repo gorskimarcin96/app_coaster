@@ -19,8 +19,8 @@ final class ChangeCoasterControllerTest extends AbstractApiTestCase
         $payload = [
             "availablePersonnel" => 2,
             "clientsPerDay" => 3,
-            "from" => "2000-01-02",
-            "to" => "2000-01-03",
+            "from" => "08:00",
+            "to" => "16:00",
         ];
         $response = $this
             ->withHeaders(['Content-Type' => 'application/json'])
@@ -33,8 +33,8 @@ final class ChangeCoasterControllerTest extends AbstractApiTestCase
 
         $this->assertSame($payload['availablePersonnel'], $entity->availablePersonnel);
         $this->assertSame($payload['clientsPerDay'], $entity->clientsPerDay);
-        $this->assertSame($payload['from'], $entity->timeRange->from->format('Y-m-d'));
-        $this->assertSame($payload['to'], $entity->timeRange->to->format('Y-m-d'));
+        $this->assertSame($payload['from'], $entity->timeRange->from->format('H:i'));
+        $this->assertSame($payload['to'], $entity->timeRange->to->format('H:i'));
     }
 
     /**
@@ -63,8 +63,8 @@ final class ChangeCoasterControllerTest extends AbstractApiTestCase
         $payload = [
             "availablePersonnel" => 2,
             "clientsPerDay" => 3,
-            "from" => "2000-01-02",
-            "to" => "2000-01-03",
+            "from" => "08:00",
+            "to" => "16:00",
         ];
         $response = $this
             ->withHeaders(['Content-Type' => 'application/json'])

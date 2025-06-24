@@ -24,7 +24,7 @@ final class ChangeCoasterHandlerTest extends TestCase
         $entity = $this->createMock(Coaster::class);
         $entity->expects($this->once())
             ->method('withUpdatedData')
-            ->with(3, 20, new TimeRange(new DateTimeImmutable('01-01-2000'), new DateTimeImmutable('02-01-2000')));
+            ->with(3, 20, new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')));
 
         $repository = $this->createMock(CoasterRepository::class);
         $repository->method('get')
@@ -32,7 +32,7 @@ final class ChangeCoasterHandlerTest extends TestCase
             ->willReturn($entity);
 
         $handler = new ChangeCoasterHandler($repository);
-        $command = new ChangeCoasterCommand('0896d580-696a-4ac6-9cb1-4d57c97b79c8', 3, 20, '01-01-2000', '02-01-2000');
+        $command = new ChangeCoasterCommand('0896d580-696a-4ac6-9cb1-4d57c97b79c8', 3, 20, '08:00', '16:00');
 
         $handler($command);
     }
@@ -50,7 +50,7 @@ final class ChangeCoasterHandlerTest extends TestCase
             ->willReturn(null);
 
         $handler = new ChangeCoasterHandler($repository);
-        $command = new ChangeCoasterCommand('0896d580-696a-4ac6-9cb1-4d57c97b79c8', 3, 20, '01-01-2000', '02-01-2000');
+        $command = new ChangeCoasterCommand('0896d580-696a-4ac6-9cb1-4d57c97b79c8', 3, 20, '08:00', '16:00');
 
         $handler($command);
     }

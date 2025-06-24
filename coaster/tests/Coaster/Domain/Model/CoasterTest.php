@@ -20,8 +20,8 @@ final class CoasterTest extends CIUnitTestCase
         $availablePersonnel = 2;
         $clientsPerDay = 1;
         $trackLengthInMeters = 3;
-        $from = new DateTimeImmutable('01-01-2000');
-        $to = new DateTimeImmutable('07-01-2000');
+        $from = new DateTimeImmutable('08:00');
+        $to = new DateTimeImmutable('16:00');
 
         $entity = Coaster::register($availablePersonnel, $clientsPerDay, $trackLengthInMeters, new TimeRange($from, $to));
 
@@ -38,8 +38,8 @@ final class CoasterTest extends CIUnitTestCase
         $availablePersonnel = 2;
         $clientsPerDay = 1;
         $trackLengthInMeters = 3;
-        $from = new DateTimeImmutable('07-01-2000');
-        $to = new DateTimeImmutable('01-01-2000');
+        $from = new DateTimeImmutable('16:00');
+        $to = new DateTimeImmutable('08:00');
 
         $this->expectException(InvalidArgumentException::class);
         Coaster::register($availablePersonnel, $clientsPerDay, $trackLengthInMeters, new TimeRange($from, $to));
@@ -51,8 +51,8 @@ final class CoasterTest extends CIUnitTestCase
         $availablePersonnel = 2;
         $clientsPerDay = 1;
         $trackLengthInMeters = 3;
-        $from = new DateTimeImmutable('01-01-2000');
-        $to = new DateTimeImmutable('07-01-2000');
+        $from = new DateTimeImmutable('08:00');
+        $to = new DateTimeImmutable('16:00');
 
         $entity = Coaster::fromPersistence(
             $id,
@@ -77,13 +77,13 @@ final class CoasterTest extends CIUnitTestCase
             2,
             1,
             20,
-            new TimeRange(new DateTimeImmutable('01-01-2000'), new DateTimeImmutable('01-01-2000')),
+            new TimeRange(new DateTimeImmutable('08:00'), new DateTimeImmutable('16:00')),
         );
 
         $availablePersonnel = 2;
         $clientsPerDay = 1;
-        $from = new DateTimeImmutable('02-01-2000');
-        $to = new DateTimeImmutable('05-01-2000');
+        $from = new DateTimeImmutable('09:00');
+        $to = new DateTimeImmutable('17:00');
         $entity = $entity->withUpdatedData($availablePersonnel, $clientsPerDay, new TimeRange($from, $to));
 
         $this->assertSame($clientsPerDay, $entity->clientsPerDay);

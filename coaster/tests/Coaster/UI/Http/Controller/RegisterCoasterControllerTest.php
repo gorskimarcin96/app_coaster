@@ -19,8 +19,8 @@ final class RegisterCoasterControllerTest extends AbstractApiTestCase
             "availablePersonnel" => 1,
             "clientsPerDay" => 2,
             "trackLengthInMeters" => 10,
-            "from" => "2000-01-01",
-            "to" => "2000-01-02",
+            "from" => "08:00",
+            "to" => "16:00",
         ];
         $response = $this
             ->withHeaders(['Content-Type' => 'application/json'])

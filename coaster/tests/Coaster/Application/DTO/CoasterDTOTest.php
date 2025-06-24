@@ -21,7 +21,7 @@ final class CoasterDTOTest extends TestCase
             1,
             2,
             3,
-            new TimeRange(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07')),
+            new TimeRange(new DateTimeImmutable('2000-01-01 08:00'), new DateTimeImmutable('2000-01-01 16:00')),
         );
         $this->assertSame(
             [
@@ -29,8 +29,8 @@ final class CoasterDTOTest extends TestCase
                 'availablePersonnel' => 1,
                 'clientsPerDay' => 2,
                 'trackLengthInMeters' => 3,
-                'from' => '2000-01-01T00:00:00+00:00',
-                'to' => '2000-01-07T00:00:00+00:00',
+                'from' => '2000-01-01T08:00:00+00:00',
+                'to' => '2000-01-01T16:00:00+00:00',
             ],
             CoasterDTO::fromEntity($entity)->toArray(),
         );

@@ -7,6 +7,7 @@ use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
 
 return RectorConfig::configure()
     ->withImportNames(removeUnusedImports: true)
@@ -14,6 +15,9 @@ return RectorConfig::configure()
         [
             LevelSetList::UP_TO_PHP_84,
             CodeigniterSetList::CODEIGNITER_45,
+            SetList::CODE_QUALITY,
+            SetList::TYPE_DECLARATION,
+            SetList::DEAD_CODE,
         ],
     )
     ->withPaths([__DIR__ . '/app', __DIR__ . '/tests'])

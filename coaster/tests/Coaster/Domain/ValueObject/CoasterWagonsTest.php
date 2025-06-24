@@ -26,7 +26,7 @@ final class CoasterWagonsTest extends TestCase
         int $wagonNumber,
         int $seats,
         int $speed,
-        $length,
+        int $length,
     ): void {
         $coaster = Coaster::register(
             11,
@@ -52,7 +52,7 @@ final class CoasterWagonsTest extends TestCase
     }
 
     #[DataProvider('calculateNeedsPersonnelInCasterWithWagonsOfNumberDataProvider')]
-    public function testCalculateNeedsPersonnelInCasterWithWagonsOfNumber(int $expected, int $wagonNumber)
+    public function testCalculateNeedsPersonnelInCasterWithWagonsOfNumber(int $expected, int $wagonNumber): void
     {
         $coaster = Coaster::register(
             0,

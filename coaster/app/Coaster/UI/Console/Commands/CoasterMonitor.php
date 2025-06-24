@@ -44,13 +44,13 @@ final class CoasterMonitor extends BaseCommand
         CLI::clearScreen();
         CLI::write((new DateTimeImmutable)->format('[Y-m-d H:i:s]'));
 
-        if (!$coasters) {
+        if ($coasters === []) {
             CLI::write('Brak danych');
         }
 
         foreach ($coasters as $coaster) {
             $wagonRepository
-                ->get(new GetWagonsQuery($coaster->id))
+                ->get(new GetWagonsQuery($coaster->id->getId()->toString()))
                 ->then(fn(array $wagons) => self::showStats(new CoasterWagons($coaster, $wagons)));
         }
     }

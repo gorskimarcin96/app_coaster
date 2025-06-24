@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Coaster\UI\Http\Controller;
 
+use App\Coaster\Domain\Model\Wagon;
 use App\Coaster\Application\DTO\WagonDTO;
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdHandler;
 use App\Coaster\Application\Query\GetWagonByIdHandler\GetWagonByIdQuery;
@@ -24,7 +25,7 @@ final class GetWagonController extends ResourceController
         $handler = new GetWagonByIdHandler($repository);
         $entity = $handler(new GetWagonByIdQuery($coasterId, $wagonId));
 
-        return $entity
+        return $entity instanceof Wagon
             ? $this->respond(WagonDTO::fromEntity($entity)->toArray(), 200)
             : $this->respond([], 404);
     }

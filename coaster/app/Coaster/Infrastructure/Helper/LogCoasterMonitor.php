@@ -95,7 +95,7 @@ final readonly class LogCoasterMonitor
                 $missingWagons,
                 $missingPersonnel,
             ),
-            CoasterStatus::MISSING_WAGONS => $missingWagons
+            CoasterStatus::MISSING_WAGONS => $missingWagons !== 0
                 ? sprintf('Brakuje wagonów %s.', $missingWagons)
                 : 'Brakuje wagonów.',
             CoasterStatus::MISSING_PERSONNEL => sprintf(

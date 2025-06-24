@@ -30,6 +30,10 @@ abstract class AbstractApiTestCase extends CIUnitTestCase
         $redis->flushAll();
     }
 
+    /**
+     * @param string[] $except
+     * @param array<string, string> $data
+     */
     public function assertStructure(array $except, array $data): void
     {
         $this->assertSame($except, array_keys($data));

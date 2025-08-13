@@ -5,40 +5,50 @@ on:
         types: [opened, synchronize, reopened]
 
 permissions:
-    contents: read
     pull-requests: write
+    contents: read
 
 jobs:
     review:
         runs-on: ubuntu-latest
-
         steps:
-            - name: Checkout repo
+            - name: Checkout
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
-            - name: Fetch base branch
-              run: git fetch origin ${{ github.base_ref }}
+            # Uruchamiamy Ollama w kontenerze
+            - name: Start Ollama service container
+              uses: addnab/docker-run-action@v3
+              with:
+                  image: ollama/ollama:latest
+                  options: -d -p 11434:11434
+                  run: |
+                      ollama pull starcoder2:3b
 
-            - name: Start Ollama in Docker
+            - name: Wait for Ollama to start
               run: |
-                  docker run -d --name ollama -p 11434:11434 ollama/ollama
-                  sleep 5
-                  docker exec ollama ollama pull starcoder2:3b
+                  for i in {1..15}; do
+                    if curl -s http://localhost:11434/api/tags >/dev/null; then
+                      echo "✅ Ollama działa"
+                      break
+                    fi
+                    echo "⏳ Czekam na Ollama..."
+                    sleep 3
+                  done
 
             - name: Run AI review
               id: ai_review
               run: |
+                  # Pobieramy różnicę między gałęziami
                   DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
-                  echo "=== CODE DIFF START ==="
-                  echo "$DIFF"
-                  echo "=== CODE DIFF END ==="
                   
+                  # Wysyłamy do modelu
                   REVIEW=$(curl -s -X POST http://localhost:11434/api/generate \
                     -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\"}" \
-                    | jq -r '.response')
+                    | jq -r '.response' | tr -d '\r' | sed '/^null$/d')
                   
+                  # Zapisujemy do outputu
                   echo "review<<EOF" >> $GITHUB_OUTPUT
                   echo "$REVIEW" >> $GITHUB_OUTPUT
                   echo "EOF" >> $GITHUB_OUTPUT

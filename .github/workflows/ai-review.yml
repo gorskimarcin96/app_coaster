@@ -2,31 +2,30 @@ name: AI Code Review
 
 on:
     pull_request:
-        types: [opened, synchronize, reopened]
+        types: [ opened, synchronize, reopened ]
 
 jobs:
     review:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
+            -   uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
 
-            - name: Start Ollama container
-              run: |
-                  docker run -d --name ollama -p 11434:11434 ollama/ollama
-                  sleep 5
-                  docker exec ollama ollama pull starcoder2:3b
+            -   name: Fetch base branch
+                run: git fetch origin ${{ github.base_ref }}
 
-            - name: Run AI review
-              run: |
-                  DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
-                  echo "=== CODE DIFF START ==="
-                  echo "$DIFF"
-                  echo "=== CODE DIFF END ==="
-                  
-                  RESPONSE=$(curl -s -X POST http://localhost:11434/api/generate \
-                    -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy code review tego diffu:\n$DIFF\"}" \
-                    | jq -r '.response')
-                  
-                  echo "=== AI REVIEW ==="
-                  echo "$RESPONSE"
+            -   name: Run AI review
+                run: |
+                    DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
+                    echo "=== CODE DIFF START ==="
+                    echo "$DIFF"
+                    echo "=== CODE DIFF END ==="
+                    
+                    RESPONSE=$(curl -s -X POST http://localhost:11434/api/generate \
+                      -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy code review tego diffu:\n$DIFF\"}" \
+                      | jq -r '.response')
+                    
+                    echo "=== AI REVIEW ==="
+                    echo "$RESPONSE"

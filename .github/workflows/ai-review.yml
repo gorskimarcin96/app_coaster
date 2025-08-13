@@ -55,18 +55,12 @@ jobs:
                   echo "=== RAW RESPONSE ==="
                   echo "$RAW" | jq .
                   
-                  REVIEW=$(echo "$RAW" | jq -r '.response // empty' | tr -d '\r')
-                  ERROR_MSG=$(echo "$RAW" | jq -r '.error // empty')
+                  REVIEW=$(echo "$RAW" | jq -r '.response' 2>/dev/null | tr -d '\r')
                   
-                  echo "=== REVIEW ==="
-                  echo "REVIEW" | jq .
-                  echo "=== ERROR_MSG ==="
-                  echo "ERROR_MSG" | jq .
-                  
-                  if [ -n "$ERROR_MSG" ]; then
-                    REVIEW="⚠️ Błąd modelu: $ERROR_MSG"
-                  elif [ -z "$REVIEW" ]; then
-                    REVIEW="⚠️ Model nie zwrócił żadnej odpowiedzi – sprawdź logi."
+                  if [ -z "$REVIEW" ] || [ "$REVIEW" = "null" ]; then
+                      echo "⚠️ Nie udało się odczytać .response, debuguję:"
+                      echo "$RAW" | jq .
+                      REVIEW="⚠️ Model zwrócił niepusty JSON, ale nie udało się odczytać pola .response"
                   fi
                   
                   echo "review<<EOF" >> $GITHUB_OUTPUT

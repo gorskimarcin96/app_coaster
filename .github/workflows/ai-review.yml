@@ -35,15 +35,29 @@ jobs:
             - name: Run AI review
               id: ai_review
               run: |
-                  # Generujemy diff
-                  DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
+                  # Generujemy diff i zamieniamy na bezpieczny string JSON
+                  DIFF=$(git diff origin/${{ github.base_ref }} --unified=0 | jq -Rs .)
+                  
+                  # Budujemy payload JSON z escapowanym diffem
+                  PAYLOAD=$(jq -n --arg diff "$DIFF" \
+                    '{model:"starcoder2:3b", prompt: ("Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n" + $diff), stream:false}')
                   
                   # Wywołujemy Ollama
                   RAW=$(curl -s -X POST http://localhost:11434/api/generate \
-                    -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\",\"stream\":false}")
+                    -H "Content-Type: application/json" \
+                    -d "$PAYLOAD")
                   
                   echo "=== RAW RESPONSE ==="
                   echo "$RAW"
                   
                   # Wyciągamy odpowiedź
-                  REVIEW=$(echo "$RAW" | jq -r '.resp
+                  REVIEW=$(echo "$RAW" | jq -r '.response' | tr -d '\r')
+                  
+                  if [ -z "$REVIEW" ] || [ "$REVIEW" = "null" ]; then
+                    REVIEW="⚠️ Model nie zwrócił żadnej odpowiedzi – sprawdź logi."
+                  fi
+                  
+                  echo "review<<EOF" >> $GITHUB_OUTPUT
+                  echo "$REVIEW" >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+

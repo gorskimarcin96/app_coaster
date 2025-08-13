@@ -11,26 +11,31 @@ permissions:
 jobs:
     review:
         runs-on: ubuntu-latest
+
         steps:
             - name: Checkout
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
-            - name: Start Ollama in background
+            - name: Start Ollama container
               run: |
-                  # Uruchamiamy Ollama w tle
-                  docker run -d -p 11434:11434 --name ollama ollama/ollama:latest
-                  
-                  # Czekamy, aż Ollama wystartuje
-                  for i in {1..15}; do
+                  docker run -d --name ollama -p 11434:11434 ollama/ollama:latest
+                  echo "⏳ Czekam na uruchomienie Ollama..."
+                  for i in {1..20}; do
                     if curl -s http://localhost:11434/api/tags >/dev/null; then
                       echo "✅ Ollama działa"
                       break
                     fi
-                    echo "⏳ Czekam na Ollama..."
                     sleep 3
                   done
+
+            - name: Pull starcoder2:3b model
+              run: |
+                  echo "📥 Pobieram model starcoder2:3b..."
+                  docker exec ollama ollama pull starcoder2:3b
+                  echo "=== Dostępne modele po pobraniu ==="
+                  curl -s http://localhost:11434/api/tags | jq .
 
             - name: Run AI review
               id: ai_review

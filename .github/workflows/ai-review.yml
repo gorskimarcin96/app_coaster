@@ -42,9 +42,17 @@ jobs:
               run: |
                   DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
                   
-                  REVIEW=$(curl -s -X POST http://localhost:11434/api/generate \
-                    -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\",\"stream\":false}" \
-                    | jq -r '.response' | tr -d '\r' | sed '/^null$/d')
+                  RAW=$(curl -s -X POST http://localhost:11434/api/generate \
+                    -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\",\"stream\":false}")
+                  
+                  echo "=== RAW RESPONSE ==="
+                  echo "$RAW"
+                  
+                  REVIEW=$(echo "$RAW" | jq -r '.response' | tr -d '\r')
+                  
+                  if [ -z "$REVIEW" ] || [ "$REVIEW" = "null" ]; then
+                    REVIEW="⚠️ Model nie zwrócił żadnej odpowiedzi – sprawdź logi."
+                  fi
                   
                   echo "review<<EOF" >> $GITHUB_OUTPUT
                   echo "$REVIEW" >> $GITHUB_OUTPUT

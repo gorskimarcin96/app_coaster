@@ -40,18 +40,16 @@ jobs:
             - name: Run AI review
               id: ai_review
               run: |
-                  # Pobieramy różnicę między gałęziami
                   DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
                   
-                  # Wysyłamy do modelu
                   REVIEW=$(curl -s -X POST http://localhost:11434/api/generate \
-                    -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\"}" \
+                    -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\",\"stream\":false}" \
                     | jq -r '.response' | tr -d '\r' | sed '/^null$/d')
                   
-                  # Zapisujemy do outputu
                   echo "review<<EOF" >> $GITHUB_OUTPUT
                   echo "$REVIEW" >> $GITHUB_OUTPUT
                   echo "EOF" >> $GITHUB_OUTPUT
+
 
             - name: Post AI review as PR comment
               uses: actions/github-script@v7

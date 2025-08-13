@@ -1,0 +1,82 @@
+name: AI Code Review
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+permissions:
+    pull-requests: write
+    contents: read
+
+jobs:
+    review:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Start Ollama container
+              run: |
+                  docker run -d --name ollama -p 11434:11434 ollama/ollama:latest
+                  echo "⏳ Czekam na uruchomienie Ollama..."
+                  for i in {1..20}; do
+                    if curl -s http://localhost:11434/api/tags >/dev/null; then
+                      echo "✅ Ollama działa"
+                      break
+                    fi
+                    sleep 3
+                  done
+
+            - name: Pull starcoder2:3b model
+              run: |
+                  echo "📥 Pobieram model starcoder2:3b..."
+                  docker exec ollama ollama pull starcoder2:3b
+                  echo "=== Dostępne modele po pobraniu ==="
+                  curl -s http://localhost:11434/api/tags | jq .
+
+            - name: Run AI review
+              id: ai_review
+              run: |
+                  # Generujemy diff i zamieniamy na bezpieczny string JSON
+                  DIFF=$(git diff origin/${{ github.base_ref }} --unified=0 | head -n 200 | jq -Rs .)
+                  
+                  # Budujemy payload JSON z escapowanym diffem
+                  PAYLOAD=$(jq -n --arg diff "$DIFF" \
+                    '{model:"starcoder2:3b", prompt: ("Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n" + $diff), stream:false}')
+                  
+                  # Wywołujemy Ollama
+                  RAW=$(curl -s -X POST http://localhost:11434/api/generate \
+                    -H "Content-Type: application/json" \
+                    -d "$PAYLOAD")
+                  
+                  echo "=== RAW RESPONSE ==="
+                  echo "$RAW" | jq .
+                  
+                  # Zbieramy wszystkie fragmenty odpowiedzi w jedną całość
+                  REVIEW=$(echo "$RAW" | jq -r '.response // empty' 2>/dev/null | tr -d '\r' | paste -sd "" -)
+                  
+                  if [ -z "$REVIEW" ]; then
+                    echo "⚠️ Nie udało się odczytać .response, debuguję:"
+                    echo "$RAW" | jq .
+                    REVIEW="⚠️ Model zwrócił odpowiedź w formacie stream, ale nie udało się jej złożyć"
+                  fi
+                  
+                  echo "review<<EOF" >> $GITHUB_OUTPUT
+                  echo "$REVIEW" >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+            - name: Post AI review as PR comment
+              uses: actions/github-script@v7
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      await github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: context.payload.pull_request.number,
+                        body: `🤖 **AI Code Review**\n\n${process.env.REVIEW}`
+                      });
+              env:
+                  REVIEW: ${{ steps.ai_review.outputs.review }}

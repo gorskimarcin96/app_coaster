@@ -53,12 +53,14 @@ jobs:
                     -d "$PAYLOAD")
                   
                   echo "=== RAW RESPONSE ==="
-                  echo "$RAW"
+                  echo "$RAW" | jq .
                   
-                  # Wyciągamy odpowiedź
-                  REVIEW=$(echo "$RAW" | jq -r '.response' | tr -d '\r')
+                  REVIEW=$(echo "$RAW" | jq -r '.response // empty' | tr -d '\r')
+                  ERROR_MSG=$(echo "$RAW" | jq -r '.error // empty')
                   
-                  if [ -z "$REVIEW" ] || [ "$REVIEW" = "null" ]; then
+                  if [ -n "$ERROR_MSG" ]; then
+                    REVIEW="⚠️ Błąd modelu: $ERROR_MSG"
+                  elif [ -z "$REVIEW" ]; then
                     REVIEW="⚠️ Model nie zwrócił żadnej odpowiedzi – sprawdź logi."
                   fi
                   

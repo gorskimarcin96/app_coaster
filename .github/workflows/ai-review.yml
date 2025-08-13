@@ -11,61 +11,39 @@ permissions:
 jobs:
     review:
         runs-on: ubuntu-latest
-
-        services:
-            ollama:
-                image: ollama/ollama:latest
-                ports:
-                    - 11434:11434
-                options: >-
-                    --health-cmd "curl --silent --fail http://localhost:11434/api/tags || exit 1"
-                    --health-interval 5s
-                    --health-timeout 2s
-                    --health-retries 20
-
         steps:
-            - name: Checkout repo
+            - name: Checkout
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
-            - name: Pull AI model
+            - name: Start Ollama in background
               run: |
-                  echo "⏳ Pobieram model..."
-                  curl -s -X POST http://ollama:11434/api/pull -d '{"model": "starcoder2:3b"}'
-                  echo "✅ Model pobrany"
+                  # Uruchamiamy Ollama w tle
+                  docker run -d -p 11434:11434 --name ollama ollama/ollama:latest
+                  
+                  # Czekamy, aż Ollama wystartuje
+                  for i in {1..15}; do
+                    if curl -s http://localhost:11434/api/tags >/dev/null; then
+                      echo "✅ Ollama działa"
+                      break
+                    fi
+                    echo "⏳ Czekam na Ollama..."
+                    sleep 3
+                  done
 
             - name: Run AI review
               id: ai_review
               run: |
+                  # Generujemy diff
                   DIFF=$(git diff origin/${{ github.base_ref }} --unified=0)
                   
-                  RAW=$(curl -s -X POST http://ollama:11434/api/generate \
+                  # Wywołujemy Ollama
+                  RAW=$(curl -s -X POST http://localhost:11434/api/generate \
                     -d "{\"model\":\"starcoder2:3b\",\"prompt\":\"Zrób szczegółowy, konstruktywny code review tego diffu, podzielone na sekcje: Plusy, Sugestie, Problemy krytyczne, Podsumowanie:\n$DIFF\",\"stream\":false}")
                   
                   echo "=== RAW RESPONSE ==="
                   echo "$RAW"
                   
-                  REVIEW=$(echo "$RAW" | jq -r '.response' | tr -d '\r')
-                  
-                  if [ -z "$REVIEW" ] || [ "$REVIEW" = "null" ]; then
-                    REVIEW="⚠️ Model nie zwrócił żadnej odpowiedzi – sprawdź logi."
-                  fi
-                  
-                  echo "review<<EOF" >> $GITHUB_OUTPUT
-                  echo "$REVIEW" >> $GITHUB_OUTPUT
-                  echo "EOF" >> $GITHUB_OUTPUT
-
-            - name: Post AI review as PR comment
-              uses: actions/github-script@v7
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  script: |
-                      await github.rest.issues.createComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        issue_number: context.payload.pull_request.number,
-                        body: `🤖 **AI Code Review**\n\n${process.env.REVIEW}`
-                      });
-              env:
-                  REVIEW: ${{ steps.ai_review.outputs.review }}
+                  # Wyciągamy odpowiedź
+                  REVIEW=$(echo "$RAW" | jq -r '.resp

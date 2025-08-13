@@ -55,18 +55,18 @@ jobs:
                   echo "=== RAW RESPONSE ==="
                   echo "$RAW" | jq .
                   
-                  REVIEW=$(echo "$RAW" | jq -r '.response' 2>/dev/null | tr -d '\r')
+                  # Zbieramy wszystkie fragmenty odpowiedzi w jedną całość
+                  REVIEW=$(echo "$RAW" | jq -r '.response // empty' 2>/dev/null | tr -d '\r' | paste -sd "" -)
                   
-                  if [ -z "$REVIEW" ] || [ "$REVIEW" = "null" ]; then
-                      echo "⚠️ Nie udało się odczytać .response, debuguję:"
-                      echo "$RAW" | jq .
-                      REVIEW="⚠️ Model zwrócił niepusty JSON, ale nie udało się odczytać pola .response"
+                  if [ -z "$REVIEW" ]; then
+                    echo "⚠️ Nie udało się odczytać .response, debuguję:"
+                    echo "$RAW" | jq .
+                    REVIEW="⚠️ Model zwrócił odpowiedź w formacie stream, ale nie udało się jej złożyć"
                   fi
                   
                   echo "review<<EOF" >> $GITHUB_OUTPUT
                   echo "$REVIEW" >> $GITHUB_OUTPUT
                   echo "EOF" >> $GITHUB_OUTPUT
-
             - name: Post AI review as PR comment
               uses: actions/github-script@v7
               with:

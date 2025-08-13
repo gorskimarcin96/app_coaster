@@ -41,7 +41,7 @@ jobs:
               id: ai_review
               run: |
                   # Generujemy diff i zamieniamy na bezpieczny string JSON
-                  DIFF=$(git diff origin/${{ github.base_ref }} --unified=0 | jq -Rs .)
+                  DIFF=$(git diff origin/${{ github.base_ref }} --unified=0 | head -n 200 | jq -Rs .)
                   
                   # Budujemy payload JSON z escapowanym diffem
                   PAYLOAD=$(jq -n --arg diff "$DIFF" \

@@ -14,13 +14,12 @@ final readonly class ChangeCoasterCommand
         public int $clientsPerDay,
         public string $from,
         public string $to,
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): ChangeCoasterCommand
     {
         return new ChangeCoasterCommand(
-            $data['id'] ?? throw new InvalidCommandArgumentException('id'),
+            $data['id'],
             $data['availablePersonnel'] ?? throw new InvalidCommandArgumentException('availablePersonnel'),
             $data['clientsPerDay'] ?? throw new InvalidCommandArgumentException('clientsPerDay'),
             $data['from'] ?? throw new InvalidCommandArgumentException('from'),
